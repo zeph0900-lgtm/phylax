@@ -174,12 +174,21 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
         val pickerOpened = total > 0
         if (selected.isEmpty()) {
             return when (kind) {
-                "camera" -> getString(if (pickerOpened) R.string.notifications_no_cameras else R.string.notifications_all_cameras_short)
-                else -> getString(if (pickerOpened) R.string.notifications_no_zones else R.string.notifications_all_zones_short)
+                "camera" -> getString(
+                    if (pickerOpened) R.string.notifications_no_cameras
+                    else R.string.notifications_all_cameras_short,
+                )
+                else -> getString(
+                    if (pickerOpened) R.string.notifications_no_zones
+                    else R.string.notifications_all_zones_short,
+                )
             }
         }
         if (pickerOpened && selected.size >= total) {
-            return getString(if (kind == "camera") R.string.notifications_all_cameras_short else R.string.notifications_all_zones_short)
+            return getString(
+                if (kind == "camera") R.string.notifications_all_cameras_short
+                else R.string.notifications_all_zones_short,
+            )
         }
         return selected.sorted().joinToString(", ")
     }
