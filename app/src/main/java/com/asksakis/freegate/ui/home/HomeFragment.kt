@@ -178,7 +178,11 @@ class HomeFragment : Fragment() {
         override fun onDownloadCompleted(fileName: String, file: java.io.File) {
             val root = _binding?.root ?: return
             com.google.android.material.snackbar.Snackbar
-                .make(root, getString(R.string.downloaded_file, fileName), com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
+                .make(
+                    root,
+                    getString(R.string.downloaded_file, fileName),
+                    com.google.android.material.snackbar.Snackbar.LENGTH_LONG,
+                )
                 .setAction(R.string.action_open) {
                     context?.let { DownloadHandler.openFile(it, file) }
                 }
