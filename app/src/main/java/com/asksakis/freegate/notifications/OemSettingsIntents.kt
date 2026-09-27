@@ -58,24 +58,16 @@ object OemSettingsIntents {
     }
 
     /** Localised user-facing instructions for the given OEM. */
-    fun instructionsFor(oem: OemType): String = when (oem) {
-        OemType.SAMSUNG ->
-            "On Samsung, 'Unrestricted' battery alone is not enough — Auto-optimize daily " +
-                "still kills background services. Do both: set battery to Unrestricted, and " +
-                "turn off Auto-optimize in Device Care. The button below opens the right screen."
-        OemType.XIAOMI ->
-            "MIUI requires explicit Autostart permission for background services. Enable it " +
-                "for Phylax in the screen below."
-        OemType.OPPO ->
-            "OPPO / OnePlus ColorOS keeps a Startup Manager list. Enable Phylax there."
-        OemType.HUAWEI ->
-            "Huawei / Honor requires Protected Apps and Startup to be enabled so the listener survives."
-        OemType.VIVO ->
-            "Vivo / iQOO needs High Background Power Consumption enabled for Phylax."
-        OemType.GENERIC ->
-            "Android's own battery-optimization exemption should be enough. If notifications " +
-                "still lag, check the manufacturer's background-activity settings manually."
-    }
+    fun instructionsFor(context: Context, oem: OemType): String = context.getString(
+        when (oem) {
+            OemType.SAMSUNG -> com.asksakis.freegate.R.string.oem_samsung_instructions
+            OemType.XIAOMI -> com.asksakis.freegate.R.string.oem_xiaomi_instructions
+            OemType.OPPO -> com.asksakis.freegate.R.string.oem_oppo_instructions
+            OemType.HUAWEI -> com.asksakis.freegate.R.string.oem_huawei_instructions
+            OemType.VIVO -> com.asksakis.freegate.R.string.oem_vivo_instructions
+            OemType.GENERIC -> com.asksakis.freegate.R.string.oem_generic_instructions
+        },
+    )
 
     private fun tryStart(context: Context, intent: Intent): Boolean {
         return try {
