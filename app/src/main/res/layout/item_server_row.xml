@@ -55,5 +55,5 @@
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_more_vert"
-        android:contentDescription="More" />
+        android:contentDescription="@string/more_options" />
 </LinearLayout>
