@@ -10,12 +10,12 @@
     -->
     <Preference
         android:key="active_server"
-        android:title="Server"
+        android:title="@string/server_title"
         android:layout="@layout/pref_server_row"
         app:iconSpaceReserved="false" />
 
     <PreferenceCategory
-        android:title="URLs">
+        android:title="@string/urls_title">
 
         <!--
             No `android:defaultValue` here on purpose: it would auto-persist
@@ -27,8 +27,8 @@
             android:icon="@drawable/ic_conn_internal"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Internal URL"
-            android:summary="URL when on home network"
+            android:title="@string/internal_url_title"
+            android:summary="@string/internal_url_summary"
             android:inputType="textUri|textNoSuggestions"
             android:importantForAutofill="no" />
 
@@ -39,18 +39,18 @@
             android:inputType="textUri|textNoSuggestions"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:summary="URL when not on home network"
-            android:title="External URL" />
+            android:summary="@string/external_url_summary"
+            android:title="@string/external_url_title" />
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Network Mode">
+        android:title="@string/network_mode_title">
 
         <ListPreference
             android:key="connection_mode"
             android:icon="@drawable/ic_conn_mode"
-            android:title="Connection Mode"
-            android:summary="Select which URL to use"
+            android:title="@string/connection_mode_title"
+            android:summary="@string/connection_mode_summary"
             android:entries="@array/connection_mode_entries"
             android:entryValues="@array/connection_mode_values"
             android:defaultValue="auto" />
@@ -58,32 +58,32 @@
         <Preference
             android:key="current_wifi_status"
             android:icon="@drawable/ic_conn_wifi"
-            android:title="Current Status"
-            android:summary="Checking network status..." />
+            android:title="@string/current_status_title"
+            android:summary="@string/checking_network_status" />
 
         <MultiSelectListPreference
             android:key="home_wifi_networks"
             android:icon="@drawable/ic_conn_wifi"
-            android:title="Home WiFi Networks"
-            android:summary="Networks treated as home"
-            android:dialogTitle="Select home networks" />
+            android:title="@string/wifi_networks_title"
+            android:summary="@string/wifi_networks_summary"
+            android:dialogTitle="@string/wifi_networks_dialog" />
 
         <Preference
             android:key="add_home_network"
             android:icon="@drawable/ic_conn_wifi_add"
-            android:title="Add a home network"
-            android:summary="Enter a WiFi SSID manually" />
+            android:title="@string/add_home_network_title"
+            android:summary="@string/add_home_network_summary" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Frigate Account">
+        android:title="@string/frigate_account_title">
 
         <EditTextPreference
             android:key="frigate_username"
             android:icon="@drawable/ic_conn_account"
-            android:title="Username"
-            android:summary="Frigate UI username"
+            android:title="@string/username_title"
+            android:summary="@string/username_summary"
             android:inputType="text|textNoSuggestions"
             android:singleLine="true"
             android:autofillHints="username" />
@@ -91,8 +91,8 @@
         <EditTextPreference
             android:key="frigate_password"
             android:icon="@drawable/ic_conn_password"
-            android:title="Password"
-            android:summary="Frigate UI password (stored encrypted)"
+            android:title="@string/password_title"
+            android:summary="@string/password_summary"
             android:inputType="textPassword"
             android:singleLine="true"
             android:autofillHints="password" />
@@ -100,14 +100,14 @@
         <Preference
             android:key="client_cert_alias"
             android:icon="@drawable/ic_conn_cert"
-            android:title="Client certificate (mTLS)"
-            android:summary="Not selected" />
+            android:title="@string/client_certificate_title"
+            android:summary="@string/not_selected" />
 
         <SwitchPreferenceCompat
             android:key="strict_tls_external"
             android:icon="@drawable/ic_conn_strict_tls"
-            android:title="Strict TLS on external URL"
-            android:summary="Require a trusted certificate for the public URL. Disable if your Frigate uses a self-signed cert."
+            android:title="@string/strict_tls_title"
+            android:summary="@string/strict_tls_summary"
             android:defaultValue="false" />
 
     </PreferenceCategory>
