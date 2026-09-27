@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - dev
+      - feature/zh-tw-i18n
     paths-ignore:
       - '*.md'
       - 'screenshots/**'
