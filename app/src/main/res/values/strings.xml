@@ -479,4 +479,13 @@
     <!-- Accessibility / branding -->
     <string name="buy_me_a_coffee">Buy me a coffee</string>
     <string name="brand_name_upper">PHYLAX</string>
+
+    <!-- Dynamic statistics formatting -->
+    <string name="stats_memory_format">RAM %1$s</string>
+    <string name="stats_uptime_format">up %1$s</string>
+    <string name="stats_camera_fps">%1$.1f fps</string>
+    <string name="stats_camera_fps_none">— fps</string>
+    <string name="stats_uptime_days_hours">%1$d d %2$d h</string>
+    <string name="stats_uptime_hours_minutes">%1$d h %2$d min</string>
+    <string name="stats_uptime_minutes">%1$d min</string>
 </resources>
