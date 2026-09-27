@@ -355,7 +355,7 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
             return
         }
         val oem = OemSettingsIntents.current()
-        pref.summary = OemSettingsIntents.instructionsFor(oem)
+        pref.summary = OemSettingsIntents.instructionsFor(requireContext(), oem)
         pref.setOnPreferenceClickListener {
             OemSettingsIntents.openBackgroundRestrictions(requireContext())
             true
