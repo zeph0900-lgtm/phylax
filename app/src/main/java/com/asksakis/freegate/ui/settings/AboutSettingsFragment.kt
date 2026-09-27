@@ -83,7 +83,11 @@ class AboutSettingsFragment : PreferenceFragmentCompat() {
             runCatching {
                 startActivity(Intent.createChooser(intent, getString(R.string.about_share_chooser)))
             }.onFailure {
-                Toast.makeText(requireContext(), getString(R.string.about_share_failed, it.message ?: ""), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.about_share_failed, it.message ?: ""),
+                    Toast.LENGTH_LONG,
+                ).show()
             }
         }
     }
