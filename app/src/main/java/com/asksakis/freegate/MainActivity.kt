@@ -451,8 +451,12 @@ class MainActivity : AppCompatActivity(),
         val transport = when {
             caps == null -> getString(R.string.connection_offline)
             isWifi -> getString(R.string.transport_wifi)
-            caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR) -> getString(R.string.transport_cellular)
-            caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_ETHERNET) -> getString(R.string.transport_ethernet)
+            caps.hasTransport(
+                android.net.NetworkCapabilities.TRANSPORT_CELLULAR,
+            ) -> getString(R.string.transport_cellular)
+            caps.hasTransport(
+                android.net.NetworkCapabilities.TRANSPORT_ETHERNET,
+            ) -> getString(R.string.transport_ethernet)
             else -> getString(R.string.transport_other)
         }
         val ssid = if (isWifi) networkUtils.getSsid() else null
@@ -464,13 +468,19 @@ class MainActivity : AppCompatActivity(),
         val stateText: String
         val tint: Int
         when {
-            caps == null -> { stateText = getString(R.string.connection_offline); tint = R.color.cert_missing }
+            caps == null -> {
+                stateText = getString(R.string.connection_offline)
+                tint = R.color.cert_missing
+            }
             validationStatus == NetworkUtils.ValidationStatus.FAILED ||
                 validationStatus == NetworkUtils.ValidationStatus.TIMEOUT -> {
                 stateText = getString(R.string.server_unreachable); tint = R.color.cert_missing
             }
             else -> {
-                stateText = getString(if (isInternal) R.string.connected_internal else R.string.connected_external)
+                stateText = getString(
+                    if (isInternal) R.string.connected_internal
+                    else R.string.connected_external,
+                )
                 tint = R.color.accent_orange
             }
         }
@@ -482,7 +492,10 @@ class MainActivity : AppCompatActivity(),
             if (ssid != null) append(" · ").append(ssid)
             if (mode != "auto") {
                 if (isNotEmpty()) append(" · ")
-                val modeLabel = getString(if (mode == "internal") R.string.url_type_internal else R.string.url_type_external)
+                val modeLabel = getString(
+                    if (mode == "internal") R.string.url_type_internal
+                    else R.string.url_type_external,
+                )
                 append(getString(R.string.forced_mode, modeLabel))
             }
         }
@@ -666,7 +679,10 @@ class MainActivity : AppCompatActivity(),
             // disagree with the URL. Fall back to isHome() only before the first emit.
             val isInternal = networkUtils.isInternal.value ?: networkUtils.isHome()
             
-            indicator.text = getString(if (isInternal) R.string.connection_internal_badge else R.string.connection_external_badge)
+            indicator.text = getString(
+                if (isInternal) R.string.connection_internal_badge
+                else R.string.connection_external_badge,
+            )
 
             // Dark capsule (same neutral grey as the signal badge) with only the
             // text recoloured per mode — orange for INT (brand accent), red for
@@ -909,9 +925,11 @@ class MainActivity : AppCompatActivity(),
             row.findViewById<TextView>(R.id.camera_name).text =
                 com.asksakis.freegate.utils.FrigateNameFormatter.pretty(c.name)
             row.findViewById<TextView>(R.id.camera_fps).text =
-                c.cameraFps?.let { getString(R.string.stats_camera_fps, it) } ?: getString(R.string.stats_camera_fps_none)
+                c.cameraFps?.let { getString(R.string.stats_camera_fps, it) }
+                    ?: getString(R.string.stats_camera_fps_none)
             row.findViewById<TextView>(R.id.camera_detect).text =
-                c.detectionFps?.let { getString(R.string.stats_detection_fps, it) } ?: getString(R.string.stats_detection_none)
+                c.detectionFps?.let { getString(R.string.stats_detection_fps, it) }
+                    ?: getString(R.string.stats_detection_none)
             container.addView(row)
         }
     }
