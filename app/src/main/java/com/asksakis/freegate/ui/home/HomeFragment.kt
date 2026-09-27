@@ -172,21 +172,21 @@ class HomeFragment : Fragment() {
     private val downloadCallbacks = object : DownloadHandler.Callbacks {
         override fun onDownloadStarted(fileName: String) {
             _binding ?: return
-            Toast.makeText(context, "Downloading $fileName...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.downloading_file, fileName), Toast.LENGTH_SHORT).show()
         }
 
         override fun onDownloadCompleted(fileName: String, file: java.io.File) {
             val root = _binding?.root ?: return
             com.google.android.material.snackbar.Snackbar
-                .make(root, "Downloaded: $fileName", com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
-                .setAction("Open") {
+                .make(root, getString(R.string.downloaded_file, fileName), com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
+                .setAction(R.string.action_open) {
                     context?.let { DownloadHandler.openFile(it, file) }
                 }
                 .show()
         }
 
         override fun onDownloadFailed(fileName: String, error: String) {
-            Toast.makeText(context, "Download failed: $error", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.download_failed, error), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -478,13 +478,9 @@ class HomeFragment : Fragment() {
         if (prefs.getBoolean("notifications_enabled", false)) return
 
         com.asksakis.freegate.ui.FreegateDialogs.builder(requireContext())
-            .setTitle("Enable notifications?")
-            .setMessage(
-                "Get a notification when this server reports an Alert (higher-confidence " +
-                    "events like a person or car). You can fine-tune Alerts vs Detections, " +
-                    "cameras and zones later in Settings > Notifications."
-            )
-            .setPositiveButton("Enable") { _, _ ->
+            .setTitle(R.string.enable_notifications_question)
+            .setMessage(R.string.enable_notifications_message)
+            .setPositiveButton(R.string.action_enable) { _, _ ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                     ContextCompat.checkSelfPermission(
                         requireContext(), Manifest.permission.POST_NOTIFICATIONS,
@@ -496,7 +492,7 @@ class HomeFragment : Fragment() {
                     enableAlertNotifications()
                 }
             }
-            .setNegativeButton("Not now", null)
+            .setNegativeButton(R.string.action_not_now, null)
             .show()
     }
 
@@ -517,7 +513,7 @@ class HomeFragment : Fragment() {
         com.asksakis.freegate.notifications.FrigateAlertService.markListeningSince(requireContext())
         com.asksakis.freegate.notifications.FrigateAlertService
             .updateForContext(requireContext(), forceRestart = true)
-        Toast.makeText(context, "Alert notifications enabled", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.alert_notifications_enabled), Toast.LENGTH_SHORT).show()
         notificationOnboarding.start()
     }
 
