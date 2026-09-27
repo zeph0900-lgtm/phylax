@@ -637,7 +637,11 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
                         }
                         "Clear" -> {
                             certManager.clearAlias()
-                            Toast.makeText(requireContext(), getString(R.string.certificate_cleared), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.certificate_cleared),
+                                Toast.LENGTH_SHORT,
+                            ).show()
                             refreshClientCertSummary()
                         }
                     }
