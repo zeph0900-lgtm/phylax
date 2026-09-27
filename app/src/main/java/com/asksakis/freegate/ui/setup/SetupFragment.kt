@@ -200,16 +200,16 @@ class SetupFragment : Fragment(R.layout.fragment_setup) {
         // the user answers so the system prompt isn't left dangling over Home.
         if (rawInternal.isNotEmpty() && !hasLocationPermission()) {
             com.asksakis.freegate.ui.FreegateDialogs.builder(requireContext())
-                .setTitle("Location for automatic switching")
+                .setTitle(R.string.setup_location_title)
                 .setMessage(
                     "You added a separate local URL. Phylax reads your current Wi-Fi network " +
                         "name to switch between the local and remote URL automatically. It is " +
                         "used only for that - no GPS, no tracking. Grant location access?"
                 )
-                .setPositiveButton("Continue") { _, _ ->
+                .setPositiveButton(R.string.action_continue) { _, _ ->
                     locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                 }
-                .setNegativeButton("Skip") { _, _ -> goHome() }
+                .setNegativeButton(R.string.action_skip) { _, _ -> goHome() }
                 .setOnCancelListener { goHome() }
                 .show()
         } else {
