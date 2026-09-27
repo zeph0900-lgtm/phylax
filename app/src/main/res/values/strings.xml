@@ -263,6 +263,10 @@
     <string name="sound_custom">Custom sound</string>
     <string name="diagnostics_never">never</string>
     <string name="diagnostics_ago">%1$s ago</string>
+    <string name="duration_days_short">%1$d d</string>
+    <string name="duration_hours_short">%1$d h</string>
+    <string name="duration_minutes_short">%1$d min</string>
+    <string name="duration_seconds_short">%1$d s</string>
     <string name="diag_service_started">Service started</string>
     <string name="diag_previous_start">Previous start</string>
     <string name="diag_service_destroyed">Service destroyed</string>
@@ -297,7 +301,7 @@
     <string name="onboarding_dnd_manual">Grant Phylax permission to override Do Not Disturb so alerts ring at alarm volume? Android opens a list of every app that can ask for this, so find Phylax there and turn it on.</string>
     <string name="dnd_settings_failed">Unable to open DND access settings</string>
     <string name="oem_generic_name">your device</string>
-    <string name="oem_samsung_instructions">On Samsung, \&quot;Unrestricted\&quot; battery alone is not enough — Auto-optimize daily still kills background services. Do both: set battery to Unrestricted, and turn off Auto-optimize in Device Care. The button below opens the right screen.</string>
+    <string name="oem_samsung_instructions">On Samsung, &quot;Unrestricted&quot; battery alone is not enough — Auto-optimize daily still kills background services. Do both: set battery to Unrestricted, and turn off Auto-optimize in Device Care. The button below opens the right screen.</string>
     <string name="oem_xiaomi_instructions">MIUI requires explicit Autostart permission for background services. Enable it for Phylax in the screen below.</string>
     <string name="oem_oppo_instructions">OPPO / OnePlus ColorOS keeps a Startup Manager list. Enable Phylax there.</string>
     <string name="oem_huawei_instructions">Huawei / Honor requires Protected Apps and Startup to be enabled so the listener survives.</string>
