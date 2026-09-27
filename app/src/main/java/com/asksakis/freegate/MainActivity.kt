@@ -447,14 +447,15 @@ class MainActivity : AppCompatActivity(),
         val cm = getSystemService(android.content.Context.CONNECTIVITY_SERVICE)
             as android.net.ConnectivityManager
         val caps = cm.activeNetwork?.let { cm.getNetworkCapabilities(it) }
+        val isWifi = caps?.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) == true
         val transport = when {
-            caps == null -> "Offline"
-            caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) -> "WiFi"
-            caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR) -> "Cellular"
-            caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_ETHERNET) -> "Ethernet"
-            else -> "Other"
+            caps == null -> getString(R.string.connection_offline)
+            isWifi -> getString(R.string.transport_wifi)
+            caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR) -> getString(R.string.transport_cellular)
+            caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_ETHERNET) -> getString(R.string.transport_ethernet)
+            else -> getString(R.string.transport_other)
         }
-        val ssid = if (transport == "WiFi") networkUtils.getSsid() else null
+        val ssid = if (isWifi) networkUtils.getSsid() else null
 
         // State text reflects the *stable* classification only — IN_PROGRESS probes are
         // transient and would cause the header to flicker between "Connected" and
@@ -463,13 +464,13 @@ class MainActivity : AppCompatActivity(),
         val stateText: String
         val tint: Int
         when {
-            caps == null -> { stateText = "Offline"; tint = R.color.cert_missing }
+            caps == null -> { stateText = getString(R.string.connection_offline); tint = R.color.cert_missing }
             validationStatus == NetworkUtils.ValidationStatus.FAILED ||
                 validationStatus == NetworkUtils.ValidationStatus.TIMEOUT -> {
-                stateText = "Server unreachable"; tint = R.color.cert_missing
+                stateText = getString(R.string.server_unreachable); tint = R.color.cert_missing
             }
             else -> {
-                stateText = if (isInternal) "Connected (internal)" else "Connected (external)"
+                stateText = getString(if (isInternal) R.string.connected_internal else R.string.connected_external)
                 tint = R.color.accent_orange
             }
         }
@@ -481,7 +482,8 @@ class MainActivity : AppCompatActivity(),
             if (ssid != null) append(" · ").append(ssid)
             if (mode != "auto") {
                 if (isNotEmpty()) append(" · ")
-                append("Forced ").append(mode)
+                val modeLabel = getString(if (mode == "internal") R.string.url_type_internal else R.string.url_type_external)
+                append(getString(R.string.forced_mode, modeLabel))
             }
         }
 
@@ -490,9 +492,9 @@ class MainActivity : AppCompatActivity(),
         val avg = if (valid.isNotEmpty()) valid.average().toLong() else null
         val last = valid.lastOrNull()
         val rttText = when {
-            avg != null && last != null -> "Roundtrip: avg ${avg}ms · last ${last}ms"
-            last != null -> "Roundtrip: last ${last}ms"
-            else -> "Roundtrip: no samples yet"
+            avg != null && last != null -> getString(R.string.roundtrip_avg_last, avg, last)
+            last != null -> getString(R.string.roundtrip_last, last)
+            else -> getString(R.string.roundtrip_none)
         }
 
         return ConnectionStatusState(stateText, tint, url, details, rttText, history)
@@ -538,10 +540,10 @@ class MainActivity : AppCompatActivity(),
         bindRtt()
 
         val dialog = com.asksakis.freegate.ui.FreegateDialogs.builder(this)
-            .setTitle("Connection status")
+            .setTitle(R.string.connection_status_dialog_title)
             .setView(root)
-            .setPositiveButton("Refresh", null) // handled in OnShowListener, no dismiss
-            .setNegativeButton("Close", null)
+            .setPositiveButton(R.string.action_refresh, null) // handled in OnShowListener, no dismiss
+            .setNegativeButton(R.string.action_close, null)
             .create()
 
         // latency observer only updates rtt/graph; endpoint + validation state touch the
@@ -626,7 +628,7 @@ class MainActivity : AppCompatActivity(),
         val isFailed = status == NetworkUtils.ValidationStatus.FAILED ||
             status == NetworkUtils.ValidationStatus.TIMEOUT
         if (isFailed) {
-            badge.text = "ERROR"
+            badge.text = getString(R.string.connection_error_badge)
             badge.setTextColor(ContextCompat.getColor(this, R.color.status_failed))
             badge.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
             return
@@ -664,7 +666,7 @@ class MainActivity : AppCompatActivity(),
             // disagree with the URL. Fall back to isHome() only before the first emit.
             val isInternal = networkUtils.isInternal.value ?: networkUtils.isHome()
             
-            indicator.text = if (isInternal) "INT" else "EXT"
+            indicator.text = getString(if (isInternal) R.string.connection_internal_badge else R.string.connection_external_badge)
 
             // Dark capsule (same neutral grey as the signal badge) with only the
             // text recoloured per mode — orange for INT (brand accent), red for
@@ -760,8 +762,8 @@ class MainActivity : AppCompatActivity(),
             com.asksakis.freegate.stats.FrigateStatsRepository.STALE_AFTER_MS
         val dimAlpha = if (stale) 0.5f else 1.0f
 
-        applyMetricBadge(cpuChip, "CPU", stats.cpuPercent, dimAlpha)
-        applyMetricBadge(gpuChip, "GPU", stats.gpuPercent, dimAlpha)
+        applyMetricBadge(cpuChip, getString(R.string.stats_cpu), stats.cpuPercent, dimAlpha)
+        applyMetricBadge(gpuChip, getString(R.string.stats_gpu), stats.gpuPercent, dimAlpha)
     }
 
     /**
@@ -795,9 +797,9 @@ class MainActivity : AppCompatActivity(),
     private fun showFrigateStatsDialog() {
         val view = layoutInflater.inflate(R.layout.dialog_frigate_stats, null)
         val dialog = com.asksakis.freegate.ui.FreegateDialogs.builder(this)
-            .setTitle("System statistics")
+            .setTitle(R.string.system_statistics)
             .setView(view)
-            .setPositiveButton("Close", null)
+            .setPositiveButton(R.string.action_close, null)
             .create()
 
         // Live-update the dialog contents while it's open — avoids having to tap-close-
@@ -829,8 +831,8 @@ class MainActivity : AppCompatActivity(),
             gpuValue.text = "—"
             cpuBar.progress = 0
             gpuBar.progress = 0
-            memChip.text = "RAM —"
-            upChip.text = "up —"
+            memChip.text = getString(R.string.stats_memory_format, "—")
+            upChip.text = getString(R.string.stats_uptime_format, "—")
             detectorsList.removeAllViews()
             camerasList.removeAllViews()
             return
@@ -846,8 +848,8 @@ class MainActivity : AppCompatActivity(),
         applyMeterTint(cpuBar, cpuValue, cpu, enabled = stats.cpuPercent != null)
         applyMeterTint(gpuBar, gpuValue, gpu, enabled = stats.gpuPercent != null)
 
-        memChip.text = "RAM " + (stats.memoryPercent?.let { "$it%" } ?: "—")
-        upChip.text = "up " + (stats.uptimeSeconds?.let { formatUptime(it) } ?: "—")
+        memChip.text = getString(R.string.stats_memory_format, stats.memoryPercent?.let { "$it%" } ?: "—")
+        upChip.text = getString(R.string.stats_uptime_format, stats.uptimeSeconds?.let { formatUptime(it) } ?: "—")
 
         bindDetectorRows(detectorsList, stats.detectors)
         bindCameraRows(camerasList, stats.cameras)
@@ -881,7 +883,7 @@ class MainActivity : AppCompatActivity(),
     ) {
         container.removeAllViews()
         if (detectors.isEmpty()) {
-            container.addView(emptyRowTextView("No detectors reported"))
+            container.addView(emptyRowTextView(getString(R.string.stats_no_detectors)))
             return
         }
         detectors.forEach { d ->
@@ -899,7 +901,7 @@ class MainActivity : AppCompatActivity(),
     ) {
         container.removeAllViews()
         if (cameras.isEmpty()) {
-            container.addView(emptyRowTextView("No cameras reported"))
+            container.addView(emptyRowTextView(getString(R.string.stats_no_cameras)))
             return
         }
         cameras.forEach { c ->
@@ -907,9 +909,9 @@ class MainActivity : AppCompatActivity(),
             row.findViewById<TextView>(R.id.camera_name).text =
                 com.asksakis.freegate.utils.FrigateNameFormatter.pretty(c.name)
             row.findViewById<TextView>(R.id.camera_fps).text =
-                c.cameraFps?.let { "%.1f fps".format(it) } ?: "— fps"
+                c.cameraFps?.let { getString(R.string.stats_camera_fps, it) } ?: getString(R.string.stats_camera_fps_none)
             row.findViewById<TextView>(R.id.camera_detect).text =
-                c.detectionFps?.let { "det %.1f".format(it) } ?: "det —"
+                c.detectionFps?.let { getString(R.string.stats_detection_fps, it) } ?: getString(R.string.stats_detection_none)
             container.addView(row)
         }
     }
@@ -976,9 +978,9 @@ class MainActivity : AppCompatActivity(),
         val hours = (seconds % 86_400) / 3_600
         val mins = (seconds % 3_600) / 60
         return when {
-            days > 0 -> "${days}d ${hours}h"
-            hours > 0 -> "${hours}h ${mins}m"
-            else -> "${mins}m"
+            days > 0 -> getString(R.string.stats_uptime_days_hours, days, hours)
+            hours > 0 -> getString(R.string.stats_uptime_hours_minutes, hours, mins)
+            else -> getString(R.string.stats_uptime_minutes, mins)
         }
     }
     
