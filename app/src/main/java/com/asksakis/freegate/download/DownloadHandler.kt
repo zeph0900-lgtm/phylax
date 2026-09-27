@@ -344,11 +344,19 @@ class DownloadHandler(
                 if (intent.resolveActivity(context.packageManager) != null) {
                     context.startActivity(intent)
                 } else {
-                    Toast.makeText(context, context.getString(R.string.no_app_open_file), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.no_app_open_file),
+                        Toast.LENGTH_SHORT,
+                    ).show()
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error opening file: ${e.message}")
-                Toast.makeText(context, context.getString(R.string.error_opening_file, e.message ?: ""), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.error_opening_file, e.message ?: ""),
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
         }
     }
