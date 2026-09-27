@@ -153,9 +153,9 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
             // Opt-in semantics: empty means off (not "all"), so a plain count reads clearer.
             val selected = prefs.getStringSet("motion_notify_cameras", emptySet()).orEmpty()
             summary = when (selected.size) {
-                0 -> "Off"
-                1 -> "1 camera"
-                else -> "${selected.size} cameras"
+                0 -> getString(R.string.off)
+                1 -> getString(R.string.notifications_one_camera)
+                else -> getString(R.string.notifications_camera_count, selected.size)
             }
         }
     }
@@ -173,9 +173,14 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
     private fun filterSummary(kind: String, selected: Set<String>, total: Int): String {
         val pickerOpened = total > 0
         if (selected.isEmpty()) {
-            return if (pickerOpened) "No ${kind}s" else "All ${kind}s"
+            return when (kind) {
+                "camera" -> getString(if (pickerOpened) R.string.notifications_no_cameras else R.string.notifications_all_cameras_short)
+                else -> getString(if (pickerOpened) R.string.notifications_no_zones else R.string.notifications_all_zones_short)
+            }
         }
-        if (pickerOpened && selected.size >= total) return "All ${kind}s"
+        if (pickerOpened && selected.size >= total) {
+            return getString(if (kind == "camera") R.string.notifications_all_cameras_short else R.string.notifications_all_zones_short)
+        }
         return selected.sorted().joinToString(", ")
     }
 
@@ -194,7 +199,7 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
         findPreference<SwitchPreferenceCompat>("notifications_enabled")?.isChecked = false
         Toast.makeText(
             requireContext(),
-            "Notifications permission denied, so alerts stay off",
+            getString(R.string.notifications_permission_denied),
             Toast.LENGTH_LONG,
         ).show()
     }
@@ -251,9 +256,9 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
         val pref = findPreference<Preference>("dnd_bypass") ?: return
         val nm = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         pref.summary = if (nm.isNotificationPolicyAccessGranted) {
-            "Granted. Alerts ring at alarm volume even while DND is on."
+            getString(R.string.notifications_dnd_granted)
         } else {
-            "Tap to grant Do Not Disturb access so alerts can override DND."
+            getString(R.string.notifications_dnd_grant)
         }
     }
 
@@ -261,9 +266,9 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
         val pref = findPreference<Preference>("battery_optimization") ?: return
         fun refresh() {
             pref.summary = if (BatteryOptHelper.isIgnoringOptimizations(requireContext())) {
-                "Exempted. The listener can run in the background."
+                getString(R.string.notifications_battery_exempted)
             } else {
-                "Battery optimization is ON, so the listener may be killed. Tap to exempt."
+                getString(R.string.notifications_battery_on)
             }
         }
         refresh()
@@ -291,10 +296,9 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
         fun refresh() {
             val am = requireContext().getSystemService(Context.ALARM_SERVICE) as? AlarmManager
             pref.summary = if (am?.canScheduleExactAlarms() != false) {
-                "Granted. The five-minute check can restart the listener."
+                getString(R.string.notifications_alarm_granted)
             } else {
-                "Tap to allow alarms and reminders so the five-minute check can restart " +
-                    "the listener."
+                getString(R.string.notifications_alarm_grant)
             }
         }
         refresh()
@@ -414,25 +418,25 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
         val prefKey: String,
         val sentinel: String,
         val defaultFileName: String,
-        val pickerTitle: String,
+        val pickerTitleRes: Int,
     ) {
         ALERT(
             AlarmSoundPlayer.PREF_ALERT_SOUND_URI,
             AlarmSoundPlayer.SILENT_SENTINEL,
             BundledTonesInstaller.ALERT_TONE_FILENAME,
-            "Alert sound",
+            R.string.notifications_alert_sound,
         ),
         DETECTION(
             DetectionSoundPlayer.PREF_DETECTION_SOUND_URI,
             DetectionSoundPlayer.SILENT_SENTINEL,
             BundledTonesInstaller.CHIME_TONE_FILENAME,
-            "Detection sound",
+            R.string.notifications_detection_sound,
         ),
         MOTION(
             MotionSoundPlayer.PREF_MOTION_SOUND_URI,
             MotionSoundPlayer.SILENT_SENTINEL,
             BundledTonesInstaller.CHIME_TONE_FILENAME,
-            "Motion sound",
+            R.string.notifications_motion_sound,
         ),
     }
 
@@ -486,11 +490,11 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
             )
             putExtra(android.media.RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
             putExtra(android.media.RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
-            putExtra(android.media.RingtoneManager.EXTRA_RINGTONE_TITLE, kind.pickerTitle)
+            putExtra(android.media.RingtoneManager.EXTRA_RINGTONE_TITLE, getString(kind.pickerTitleRes))
             putExtra(android.media.RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, current)
         }
         runCatching { soundPicker.launch(intent) }.onFailure {
-            Toast.makeText(requireContext(), "Couldn't open ringtone picker", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.ringtone_picker_failed), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -508,11 +512,11 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
             ) ?: return@forEach
             val raw = readRawSoundChoice(kind)
             val defaultLabel = when (kind) {
-                SoundKind.ALERT -> "Phylax Alert (default)"
-                SoundKind.DETECTION, SoundKind.MOTION -> "Phylax Chime (default)"
+                SoundKind.ALERT -> getString(R.string.sound_alert_default)
+                SoundKind.DETECTION, SoundKind.MOTION -> getString(R.string.sound_chime_default)
             }
             pref.summary = when {
-                raw == kind.sentinel -> "Silent"
+                raw == kind.sentinel -> getString(R.string.sound_silent)
                 // Show "(default)" whenever the sound is the bundled Phylax tone, whether
                 // it's untouched (null) or explicitly stored as that tone's URI, so all
                 // three rows read consistently while on their defaults.
@@ -520,7 +524,7 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
                 else -> runCatching {
                     android.media.RingtoneManager.getRingtone(requireContext(), android.net.Uri.parse(raw))
                         ?.getTitle(requireContext()).orEmpty()
-                }.getOrDefault("").ifEmpty { "Custom sound" }
+                }.getOrDefault("").ifEmpty { getString(R.string.sound_custom) }
             }
         }
     }
@@ -542,23 +546,24 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
     private fun showDiagnosticsDialog() {
         val prefs = preferenceManager.sharedPreferences ?: return
         val now = System.currentTimeMillis()
-        fun line(label: String, key: String): String {
+        fun line(labelRes: Int, key: String): String {
             val ts = prefs.getLong(key, 0L)
-            val v = if (ts <= 0L) "never" else "${formatRelativeAge(now - ts)} ago"
-            return "$label: $v"
+            val v = if (ts <= 0L) getString(R.string.diagnostics_never)
+            else getString(R.string.diagnostics_ago, formatRelativeAge(now - ts))
+            return "${getString(labelRes)}: $v"
         }
         val body = buildString {
-            appendLine(line("Service started", ServiceLifecycleLog.PREF_SERVICE_STARTED_MS))
-            appendLine(line("Previous start", ServiceLifecycleLog.PREF_SERVICE_PREV_STARTED_MS))
-            appendLine(line("Service destroyed", ServiceLifecycleLog.PREF_SERVICE_DESTROYED_MS))
-            appendLine(line("WS connected", ServiceLifecycleLog.PREF_WS_CONNECTED_MS))
-            appendLine(line("WS disconnected", ServiceLifecycleLog.PREF_WS_DISCONNECTED_MS))
-            appendLine(line("Last alert delivered", FrigateAlertService.PREF_LAST_ALERT_MS))
+            appendLine(line(R.string.diag_service_started, ServiceLifecycleLog.PREF_SERVICE_STARTED_MS))
+            appendLine(line(R.string.diag_previous_start, ServiceLifecycleLog.PREF_SERVICE_PREV_STARTED_MS))
+            appendLine(line(R.string.diag_service_destroyed, ServiceLifecycleLog.PREF_SERVICE_DESTROYED_MS))
+            appendLine(line(R.string.diag_ws_connected, ServiceLifecycleLog.PREF_WS_CONNECTED_MS))
+            appendLine(line(R.string.diag_ws_disconnected, ServiceLifecycleLog.PREF_WS_DISCONNECTED_MS))
+            appendLine(line(R.string.diag_last_alert, FrigateAlertService.PREF_LAST_ALERT_MS))
         }
         com.asksakis.freegate.ui.FreegateDialogs.builder(requireContext())
-            .setTitle("Service diagnostics")
+            .setTitle(R.string.notifications_diagnostics)
             .setMessage(body)
-            .setPositiveButton("Close", null)
+            .setPositiveButton(R.string.action_close, null)
             .show()
     }
 
@@ -572,16 +577,16 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
         val ts = preferenceManager.sharedPreferences
             ?.getLong(FrigateAlertService.PREF_LAST_ALERT_MS, 0L) ?: 0L
         if (ts <= 0L) {
-            pref.summary = "No alerts received yet."
+            pref.summary = getString(R.string.no_alerts_received)
             return
         }
         val ageMs = System.currentTimeMillis() - ts
         val relative = formatRelativeAge(ageMs)
         val stale = ageMs > STALE_ALERT_THRESHOLD_MS
         pref.summary = if (stale) {
-            "$relative ago. If this is unexpected, check the Background restrictions row."
+            getString(R.string.last_alert_stale, relative)
         } else {
-            "$relative ago."
+            getString(R.string.last_alert_age, relative)
         }
     }
 
@@ -591,10 +596,10 @@ class NotificationsSettingsFragment : PreferenceFragmentCompat() {
         val hr = min / 60
         val day = hr / 24
         return when {
-            day > 0 -> "${day}d"
-            hr > 0 -> "${hr}h"
-            min > 0 -> "${min}m"
-            else -> "${sec}s"
+            day > 0 -> getString(R.string.duration_days_short, day)
+            hr > 0 -> getString(R.string.duration_hours_short, hr)
+            min > 0 -> getString(R.string.duration_minutes_short, min)
+            else -> getString(R.string.duration_seconds_short, sec)
         }
     }
 
