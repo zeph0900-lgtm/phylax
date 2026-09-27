@@ -271,7 +271,9 @@ class FrigateNotifier(private val context: Context) {
             0 -> context.getString(R.string.activity_label)
             1 -> pretty[0]
             2 -> context.getString(R.string.object_and, pretty[0], pretty[1])
-            else -> pretty.dropLast(1).joinToString(", ") + ", " + context.getString(R.string.object_and, "", pretty.last()).trimStart()
+            else -> pretty.dropLast(1).joinToString(", ") +
+                ", " +
+                context.getString(R.string.object_and, "", pretty.last()).trimStart()
         }
     }
 
