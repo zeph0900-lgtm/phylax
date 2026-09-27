@@ -153,7 +153,7 @@ class NotificationOnboarding(
         val oem = OemSettingsIntents.current()
         FreegateDialogs.builder(ctx)
             .setTitle(ctx.getString(R.string.onboarding_oem_title, oem.displayName))
-            .setMessage(OemSettingsIntents.instructionsFor(oem))
+            .setMessage(OemSettingsIntents.instructionsFor(ctx, oem))
             .setPositiveButton(R.string.action_open_settings) { _, _ ->
                 if (onDismiss != null) waitingForSystemScreen = true
                 OemSettingsIntents.openBackgroundRestrictions(ctx)
