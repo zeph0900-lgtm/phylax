@@ -250,6 +250,10 @@
     <string name="sound_custom">自訂音效</string>
     <string name="diagnostics_never">從未</string>
     <string name="diagnostics_ago">%1$s前</string>
+    <string name="duration_days_short">%1$d 天</string>
+    <string name="duration_hours_short">%1$d 小時</string>
+    <string name="duration_minutes_short">%1$d 分鐘</string>
+    <string name="duration_seconds_short">%1$d 秒</string>
     <string name="diag_service_started">服務啟動</string>
     <string name="diag_previous_start">前次啟動</string>
     <string name="diag_service_destroyed">服務停止</string>
@@ -365,7 +369,7 @@
     <string name="stats_waiting">正在等待 Frigate 資料…</string>
     <string name="stats_no_detectors">未回報偵測器</string>
     <string name="stats_no_cameras">未回報攝影機</string>
-    <string name="stats_detection_fps">偵測 %.1f</string>
+    <string name="stats_detection_fps">偵測 %1$.1f</string>
     <string name="stats_detection_none">偵測 —</string>
 
     <string name="download_location_title">下載位置</string>
