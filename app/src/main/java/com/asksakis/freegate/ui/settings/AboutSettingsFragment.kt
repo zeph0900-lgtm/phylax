@@ -67,23 +67,23 @@ class AboutSettingsFragment : PreferenceFragmentCompat() {
     private fun shareDebugLogs() {
         val pref = findPreference<Preference>("about_share_logs")
         pref?.isEnabled = false
-        pref?.summary = "Collecting logs..."
+        pref?.summary = getString(R.string.about_collecting_logs)
         viewLifecycleOwner.lifecycleScope.launch {
             val intent = PersistentLogcatWriter.buildShareIntent(requireContext())
             pref?.isEnabled = true
-            pref?.summary = SHARE_LOGS_SUMMARY
+            pref?.summary = getString(R.string.about_share_logs_summary)
             if (intent == null) {
                 Toast.makeText(
                     requireContext(),
-                    "No logs to share. Android did not let the app read its own logcat.",
+                    getString(R.string.about_no_logs),
                     Toast.LENGTH_LONG,
                 ).show()
                 return@launch
             }
             runCatching {
-                startActivity(Intent.createChooser(intent, "Share debug logs"))
+                startActivity(Intent.createChooser(intent, getString(R.string.about_share_chooser)))
             }.onFailure {
-                Toast.makeText(requireContext(), "Share failed: ${it.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.about_share_failed, it.message ?: ""), Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -104,7 +104,7 @@ class AboutSettingsFragment : PreferenceFragmentCompat() {
     private fun openExternally(url: String) {
         runCatching {
             val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(Intent.createChooser(viewIntent, "Open with"))
+            startActivity(Intent.createChooser(viewIntent, getString(R.string.about_open_with)))
         }
     }
 
@@ -125,7 +125,7 @@ class AboutSettingsFragment : PreferenceFragmentCompat() {
             addView(progressBar)
         }
         val progressDialog = com.asksakis.freegate.ui.FreegateDialogs.builder(requireContext())
-            .setTitle("Checking for updates...")
+            .setTitle(R.string.update_checking)
             .setView(layout)
             .setCancelable(false)
             .create()
@@ -142,12 +142,12 @@ class AboutSettingsFragment : PreferenceFragmentCompat() {
                 )
                 updateChecker.lastErrorMessage != null -> Toast.makeText(
                     context,
-                    "Could not check for updates: ${updateChecker.lastErrorMessage}",
+                    getString(R.string.update_check_failed, updateChecker.lastErrorMessage ?: ""),
                     Toast.LENGTH_LONG,
                 ).show()
                 else -> Toast.makeText(
                     context,
-                    "You're on the latest version",
+                    getString(R.string.update_latest),
                     Toast.LENGTH_SHORT,
                 ).show()
             }
@@ -160,7 +160,5 @@ class AboutSettingsFragment : PreferenceFragmentCompat() {
         const val URL_CHANGELOG = "https://github.com/sfortis/phylax/releases"
         const val URL_THIRD_PARTY = "https://github.com/sfortis/phylax/blob/main/THIRD_PARTY_NOTICES.md"
         const val URL_SPONSOR = "https://www.buymeacoffee.com/sfortis"
-        // Kept in one place so the row can show progress and then read the same as the XML.
-        const val SHARE_LOGS_SUMMARY = "Bundle the last day of logs to attach to a report"
     }
 }
