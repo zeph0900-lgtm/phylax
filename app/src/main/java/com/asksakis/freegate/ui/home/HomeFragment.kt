@@ -316,6 +316,9 @@ class HomeFragment : Fragment() {
         setupWebView()
         setupFileChooserLauncher()
         setupBackButtonHandler()
+        binding.connectingSettings.setOnClickListener {
+            findNavController().navigate(R.id.nav_settings)
+        }
 
         // Decide up front: if we have credentials, suppress the URL observer's initial
         // load. primeFrigateSessionAsync will perform the single authenticated load
@@ -395,6 +398,7 @@ class HomeFragment : Fragment() {
         binding.connectingSubtitle.visibility =
             if (profileName.isNullOrBlank()) View.GONE else View.VISIBLE
         binding.connectingOverlay.visibility = View.VISIBLE
+        binding.connectingSettings.requestFocus()
     }
 
     /**
@@ -421,6 +425,7 @@ class HomeFragment : Fragment() {
         if (onRetry != null) {
             binding.connectingRetry.visibility = View.VISIBLE
             binding.connectingRetry.setOnClickListener { onRetry() }
+            binding.connectingRetry.requestFocus()
         } else {
             binding.connectingRetry.visibility = View.GONE
             binding.connectingRetry.setOnClickListener(null)
@@ -462,6 +467,13 @@ class HomeFragment : Fragment() {
         }
         binding.setupEmptyState.visibility = View.VISIBLE
         binding.setupEmptyState.bringToFront()
+        val controls = listOf(binding.setupAddServer, binding.setupDocs)
+        com.asksakis.freegate.tv.TvNativeNavigation.prepare(controls)
+        binding.setupAddServer.post {
+            if (_binding === binding && binding.setupEmptyState.visibility == View.VISIBLE) {
+                com.asksakis.freegate.tv.TvNativeNavigation.focusFirst(controls)
+            }
+        }
     }
 
     private fun hideSetupEmptyState() {
@@ -1215,6 +1227,7 @@ class HomeFragment : Fragment() {
 
                     // Make Frigate's (otherwise no-op) PiP button enter Android system PiP.
                     view?.evaluateJavascript(PIP_INTERCEPT_JS, null)
+                    if (view != null) installTvRemote(view)
                 }
 
                 override fun onReceivedError(
@@ -1551,6 +1564,8 @@ class HomeFragment : Fragment() {
     }
     
     override fun onDestroyView() {
+        tvRemote?.dispose()
+        tvRemote = null
         // Clean up fullscreen mode if active (the player view is attached to the
         // window decor, so remove it from there).
         if (customView != null) {
@@ -1763,6 +1778,33 @@ class HomeFragment : Fragment() {
     /**
      * Handles app navigation when there's no more WebView history
      */
+    private var tvRemote: com.asksakis.freegate.tv.TvRemoteController? = null
+
+    private fun installTvRemote(web: WebView) {
+        if (web.url?.startsWith("http") != true || mainFrameInErrorState) return
+        if (tvRemote == null) {
+            tvRemote = com.asksakis.freegate.tv.TvRemoteController(web,
+                { findNavController().navigate(R.id.nav_settings) },
+                { activity?.finish() })
+        }
+        tvRemote?.install()
+        _binding?.swipeRefresh?.isEnabled = false
+    }
+
+    fun dispatchTvKey(event: android.view.KeyEvent): Boolean {
+        val b = _binding ?: return false
+        if (b.setupEmptyState.visibility == View.VISIBLE) {
+            return com.asksakis.freegate.tv.TvNativeNavigation.dispatch(event, listOf(b.setupAddServer, b.setupDocs))
+        }
+        if (b.connectingOverlay.visibility == View.VISIBLE) {
+            val controls = listOf(b.connectingRetry, b.connectingSettings)
+            com.asksakis.freegate.tv.TvNativeNavigation.prepare(controls)
+            return com.asksakis.freegate.tv.TvNativeNavigation.dispatch(event, controls)
+        }
+        if (customView != null) return false
+        return tvRemote?.dispatch(event) ?: false
+    }
+
     private fun handleBackNavigation() {
         // Just finish the activity normally instead of force-killing the process
         activity?.finish()
@@ -1775,6 +1817,12 @@ class HomeFragment : Fragment() {
                 if (customView != null) {
                     Log.d(TAG, "Back pressed in fullscreen mode - exiting fullscreen")
                     binding.webView.webChromeClient?.onHideCustomView()
+                    return
+                }
+
+                if (tvRemote != null && _binding?.connectingOverlay?.visibility != View.VISIBLE &&
+                    _binding?.setupEmptyState?.visibility != View.VISIBLE) {
+                    tvRemote?.back()
                     return
                 }
 

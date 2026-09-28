@@ -86,7 +86,17 @@ class SetupFragment : Fragment(R.layout.fragment_setup) {
 
         testButton.setOnClickListener { onTest() }
         saveButton.setOnClickListener { onSave() }
+        com.asksakis.freegate.tv.TvNativeNavigation.prepare(tvControls())
+        view.post { if (this.view === view) urlInput.requestFocus() }
     }
+
+    private fun tvControls(): List<View> = listOf(
+        urlInput, nameInput, usernameInput, passwordInput,
+        requireView().findViewById(R.id.setup_advanced_toggle), internalUrlInput, testButton, saveButton,
+    )
+
+    fun dispatchTvKey(event: android.view.KeyEvent): Boolean =
+        com.asksakis.freegate.tv.TvNativeNavigation.dispatch(event, tvControls())
 
     /** Normalise the primary URL. Local Frigate installs are http by default. */
     private fun normalizePrimary(): UrlNormalizer.Result =

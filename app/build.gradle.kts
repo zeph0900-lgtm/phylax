@@ -17,6 +17,13 @@ android {
     compileSdk = 35
 
     signingConfigs {
+        getByName("debug") {
+            // Use the repository test key directly; runner home locations can differ.
+            storeFile = rootProject.file(".ci/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
         create("release") {
             // Local dev reads from local.properties; CI injects via env vars. Falling
             // through to env keeps the gradle file itself free of any secret material.
@@ -35,11 +42,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.asksakis.freegate"
+        applicationId = "com.asksakis.freegate.tw.tv.viewer"
         minSdk = 29
         targetSdk = 35
-        versionCode = 21
-        versionName = "2.13"
+        versionCode = 21303
+        versionName = "2.13-TV0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -81,7 +88,7 @@ android {
             dimension = "distribution"
             // Default flavor: includes the in-app updater that polls GitHub Releases
             // and installs APKs via REQUEST_INSTALL_PACKAGES.
-            buildConfigField("boolean", "ENABLE_UPDATE_CHECK", "true")
+            buildConfigField("boolean", "ENABLE_UPDATE_CHECK", "false")
         }
         create("fdroid") {
             dimension = "distribution"
@@ -99,6 +106,8 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    testOptions { unitTests.isIncludeAndroidResources = true }
+
     buildFeatures {
         viewBinding = true
         buildConfig = true
@@ -143,6 +152,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     
     testImplementation(libs.junit)
+    testImplementation("org.robolectric:robolectric:4.14.1")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

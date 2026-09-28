@@ -50,7 +50,8 @@
         android:layout_height="match_parent"
         android:background="?attr/colorSurface"
         android:clickable="true"
-        android:focusable="true"
+        android:focusable="false"
+        android:descendantFocusability="afterDescendants"
         android:elevation="12dp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
@@ -126,6 +127,12 @@
                     android:text="@string/connecting_retry"
                     android:visibility="gone"
                     tools:visibility="visible" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/connecting_settings"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_settings" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
@@ -143,7 +150,8 @@
         android:layout_height="match_parent"
         android:background="?attr/colorSurface"
         android:clickable="true"
-        android:focusable="true"
+        android:focusable="false"
+        android:descendantFocusability="afterDescendants"
         android:elevation="16dp"
         android:visibility="gone"
         tools:visibility="visible"

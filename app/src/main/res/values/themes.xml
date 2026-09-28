@@ -6,6 +6,8 @@
         look in one place without memorising the MD3 token names.
     -->
     <style name="Theme.Freegate" parent="Theme.Material3.DayNight">
+        <item name="selectableItemBackground">@drawable/tv_native_focus</item>
+        <item name="android:selectableItemBackground">@drawable/tv_native_focus</item>
         <!-- Brand accent: switches, sliders, focus rings -->
         <item name="colorPrimary">@color/accent_orange</item>
         <item name="colorOnPrimary">@color/accent_orange_on</item>
