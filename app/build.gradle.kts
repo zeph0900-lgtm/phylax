@@ -35,7 +35,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.asksakis.freegate"
+        applicationId = "com.asksakis.freegate.tw"
         minSdk = 29
         targetSdk = 35
         versionCode = 21
@@ -79,9 +79,9 @@ android {
     productFlavors {
         create("github") {
             dimension = "distribution"
-            // Default flavor: includes the in-app updater that polls GitHub Releases
-            // and installs APKs via REQUEST_INSTALL_PACKAGES.
-            buildConfigField("boolean", "ENABLE_UPDATE_CHECK", "true")
+            // Phylax TW keeps self-update disabled until this fork publishes its own signed releases.
+            // This avoids downloading the upstream APK, whose signature cannot update this app.
+            buildConfigField("boolean", "ENABLE_UPDATE_CHECK", "false")
         }
         create("fdroid") {
             dimension = "distribution"
@@ -110,7 +110,7 @@ androidComponents {
         val versionName = android.defaultConfig.versionName
         variant.outputs.forEach { output ->
             val apkOutput = output as? com.android.build.api.variant.impl.VariantOutputImpl
-            apkOutput?.outputFileName?.set("phylax-${versionName}-${variant.name}.apk")
+            apkOutput?.outputFileName?.set("phylax-tw-${versionName}-${variant.name}.apk")
         }
     }
 }
