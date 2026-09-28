@@ -38,8 +38,8 @@ android {
         applicationId = "com.asksakis.freegate.tw.tv"
         minSdk = 29
         targetSdk = 35
-        versionCode = 2201
-        versionName = "2.13-TV1"
+        versionCode = 2202
+        versionName = "2.13-TV2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
