@@ -421,6 +421,9 @@ class HomeFragment : Fragment() {
         if (onRetry != null) {
             binding.connectingRetry.visibility = View.VISIBLE
             binding.connectingRetry.setOnClickListener { onRetry() }
+            if (TvRemoteNavigator.isTelevision(requireContext())) {
+                binding.connectingRetry.post { binding.connectingRetry.requestFocus() }
+            }
         } else {
             binding.connectingRetry.visibility = View.GONE
             binding.connectingRetry.setOnClickListener(null)
@@ -462,6 +465,9 @@ class HomeFragment : Fragment() {
         }
         binding.setupEmptyState.visibility = View.VISIBLE
         binding.setupEmptyState.bringToFront()
+        if (TvRemoteNavigator.isTelevision(requireContext())) {
+            binding.setupAddServer.post { binding.setupAddServer.requestFocus() }
+        }
     }
 
     private fun hideSetupEmptyState() {
@@ -1215,6 +1221,9 @@ class HomeFragment : Fragment() {
 
                     // Make Frigate's (otherwise no-op) PiP button enter Android system PiP.
                     view?.evaluateJavascript(PIP_INTERCEPT_JS, null)
+
+                    // Android TV: install spatial D-pad navigation after the page is ready.
+                    view?.let { TvRemoteNavigator.onPageReady(it) }
                 }
 
                 override fun onReceivedError(
@@ -1511,6 +1520,7 @@ class HomeFragment : Fragment() {
                     binding.webView,
                     PreferenceManager.getDefaultSharedPreferences(requireContext())
                 )
+                TvRemoteNavigator.install(binding.webView)
                 binding.swipeRefresh.setOnRefreshListener {
                     homeViewModel.refreshStatus()
                     binding.webView.reload()
