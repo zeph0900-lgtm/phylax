@@ -35,11 +35,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.asksakis.freegate.tw"
+        applicationId = "com.asksakis.freegate.tw.tv"
         minSdk = 29
         targetSdk = 35
-        versionCode = 2101
-        versionName = "2.13-TW1"
+        versionCode = 2201
+        versionName = "2.13-TV1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -110,7 +110,7 @@ androidComponents {
         val versionName = android.defaultConfig.versionName
         variant.outputs.forEach { output ->
             val apkOutput = output as? com.android.build.api.variant.impl.VariantOutputImpl
-            apkOutput?.outputFileName?.set("phylax-tw-${versionName}-${variant.name}.apk")
+            apkOutput?.outputFileName?.set("phylax-tv-${versionName}-${variant.name}.apk")
         }
     }
 }
