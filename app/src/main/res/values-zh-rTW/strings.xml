@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Phylax TW</string>
+    <string name="app_name">Phylax TW TV Test</string>
     <string name="navigation_drawer_open">開啟導覽選單</string>
     <string name="navigation_drawer_close">關閉導覽選單</string>
-    <string name="nav_header_title">Phylax TW</string>
+    <string name="nav_header_title">Phylax TW TV Test</string>
     <string name="nav_header_subtitle">Frigate NVR 檢視器</string>
     <string name="nav_header_desc">導覽標頭</string>
     <string name="action_settings">設定</string>
@@ -27,7 +27,7 @@
 
     <string name="settings_general">一般</string>
     <string name="app_language_title">語言</string>
-    <string name="app_language_summary">選擇 Phylax TW 使用的介面語言</string>
+    <string name="app_language_summary">選擇 Phylax TW TV Test 使用的介面語言</string>
     <string-array name="app_language_entries">
         <item>跟隨系統</item><item>繁體中文（台灣）</item><item>English</item>
     </string-array>
@@ -452,7 +452,7 @@
     <string name="pip_unsupported">此裝置不支援子母畫面</string>
     <string name="pip_unavailable">請在系統設定中允許 Phylax 使用子母畫面</string>
     <string name="buy_me_a_coffee">贊助作者</string>
-    <string name="brand_name_upper">PHYLAX TW</string>
+    <string name="brand_name_upper">PHYLAX TW TV</string>
 
     <!-- 動態系統統計格式 -->
     <string name="stats_memory_format">RAM %1$s</string>
