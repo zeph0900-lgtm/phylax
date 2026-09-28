@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Phylax</string>
+    <string name="app_name">Phylax TW</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Phylax</string>
+    <string name="nav_header_title">Phylax TW</string>
     <string name="nav_header_subtitle">Viewer for Frigate NVR</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -28,7 +28,7 @@
     <!-- Language -->
     <string name="settings_general">General</string>
     <string name="app_language_title">Language</string>
-    <string name="app_language_summary">Choose the language used by Phylax</string>
+    <string name="app_language_summary">Choose the language used by Phylax TW</string>
     <string-array name="app_language_entries">
         <item>Follow system</item>
         <item>繁體中文（台灣）</item>
@@ -478,7 +478,7 @@
 
     <!-- Accessibility / branding -->
     <string name="buy_me_a_coffee">Buy me a coffee</string>
-    <string name="brand_name_upper">PHYLAX</string>
+    <string name="brand_name_upper">PHYLAX TW</string>
 
     <!-- Dynamic statistics formatting -->
     <string name="stats_memory_format">RAM %1$s</string>
