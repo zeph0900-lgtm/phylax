@@ -35,11 +35,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.asksakis.freegate"
+        applicationId = "com.asksakis.freegate.tw.tv.viewer"
         minSdk = 29
         targetSdk = 35
-        versionCode = 21
-        versionName = "2.13"
+        versionCode = 21302
+        versionName = "2.13-TV0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -81,7 +81,7 @@ android {
             dimension = "distribution"
             // Default flavor: includes the in-app updater that polls GitHub Releases
             // and installs APKs via REQUEST_INSTALL_PACKAGES.
-            buildConfigField("boolean", "ENABLE_UPDATE_CHECK", "true")
+            buildConfigField("boolean", "ENABLE_UPDATE_CHECK", "false")
         }
         create("fdroid") {
             dimension = "distribution"

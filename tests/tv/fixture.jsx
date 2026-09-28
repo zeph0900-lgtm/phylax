@@ -1,0 +1,12 @@
+import React, {useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import * as Dialog from '@radix-ui/react-dialog';
+import * as Select from '@radix-ui/react-select';
+window.pageEscapes=0;window.clicks=0;
+document.addEventListener('keydown',e=>{if(e.key==='Escape') window.pageEscapes++;});
+function App(){
+ const [group,setGroup]=useState(false),[camera,setCamera]=useState(false),[mode,setMode]=useState('smart');
+ return <><aside><a href='/'>Home</a><div className='flex-col'><button>All cameras</button><button>Home group</button><button onClick={()=>setGroup(true)}>Edit groups</button></div></aside><div id='pageRoot' className='absolute'><div className='cards'>{['bedroom','livingroom','front2','front'].map(name=><div key={name} data-camera={name} onClick={()=>{window.clicks++;window.lastCamera=name;}}>{name}</div>)}</div><button id='bottom'>Bottom</button></div>
+ <Dialog.Root open={group} onOpenChange={setGroup}><Dialog.Portal><Dialog.Overlay className='shade'/><Dialog.Content className='dialog' aria-describedby={undefined}><Dialog.Title>Group edit</Dialog.Title><div className='scroll'><input id='name' defaultValue='Home'/>{Array.from({length:10},(_,i)=><div className='row' key={i}><span>Camera {i}</span><Dialog.Root open={camera===i} onOpenChange={o=>setCamera(o?i:false)}><Dialog.Trigger id={'gear'+i}>Settings</Dialog.Trigger><Dialog.Portal><Dialog.Overlay className='shade'/><Dialog.Content className='dialog inner' aria-describedby={undefined}><Dialog.Title>Camera {i}</Dialog.Title><Select.Root value={mode} onValueChange={setMode}><Select.Trigger id='stream'><Select.Value/></Select.Trigger><Select.Portal><Select.Content position='popper' className='select'><Select.Viewport>{['smart','continuous','no-streaming'].map(v=><Select.Item key={v} value={v}><Select.ItemText>{v}</Select.ItemText></Select.Item>)}</Select.Viewport></Select.Content></Select.Portal></Select.Root><button id='cameraCancel' onClick={()=>setCamera(false)}>Cancel</button><button id='cameraSave' onClick={()=>setCamera(false)}>Save</button></Dialog.Content></Dialog.Portal></Dialog.Root><button role='switch' aria-checked='true'>Enabled</button></div>)}</div><button id='groupCancel' onClick={()=>setGroup(false)}>Cancel</button><button id='groupSave' onClick={()=>setGroup(false)}>Save</button></Dialog.Content></Dialog.Portal></Dialog.Root></>;
+}
+createRoot(document.getElementById('root')).render(<App/>);

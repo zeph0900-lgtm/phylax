@@ -209,7 +209,8 @@ class MainActivity : AppCompatActivity(),
         val controller = WindowInsetsControllerCompat(window, binding.root)
         val navHost = findViewById<View>(R.id.nav_host_fragment_content_main)
         val lp = navHost?.layoutParams as? androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams
-        if (landscape) {
+        val home = !::navController.isInitialized || navController.currentDestination?.id == R.id.nav_home
+        if (landscape && home) {
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             controller.hide(WindowInsetsCompat.Type.statusBars())
@@ -289,6 +290,15 @@ class MainActivity : AppCompatActivity(),
         return navHost?.childFragmentManager?.fragments
             ?.firstOrNull { it is com.asksakis.freegate.ui.home.HomeFragment }
             as? com.asksakis.freegate.ui.home.HomeFragment
+    }
+
+    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
+        val imeVisible = androidx.core.view.ViewCompat.getRootWindowInsets(binding.root)
+            ?.isVisible(WindowInsetsCompat.Type.ime()) == true
+        if (!imeVisible && ::navController.isInitialized &&
+            navController.currentDestination?.id == R.id.nav_home &&
+            currentHomeFragment()?.dispatchTvKey(event) == true) return true
+        return super.dispatchKeyEvent(event)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1045,6 +1055,7 @@ class MainActivity : AppCompatActivity(),
             // toolbar title. On the root (Home) we want the logo + badges +
             // toolbar actions to own the space, no text — clear it explicitly
             // after NavigationUI runs.
+            applyLandscapeChrome()
             if (destination.id == R.id.nav_home) {
                 supportActionBar?.title = ""
             }

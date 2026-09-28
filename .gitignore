@@ -51,3 +51,9 @@ scripts/
 !SECURITY.md
 !.github/**/*.md
 internal_docs/
+
+# TV navigation test dependencies and generated output
+node_modules/
+tests/tv/*.png
+
+/tests/tv/node_modules

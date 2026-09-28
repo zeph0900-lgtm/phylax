@@ -253,3 +253,23 @@ If Phylax made your life easier and you'd like to say thanks, a coffee goes a lo
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## Traditional Chinese TV viewer (TV0.2)
+
+This branch starts from `feature/zh-tw-i18n`, not the experimental TV remote patches.
+The app uses a separate package (`com.asksakis.freegate.tw.tv.viewer`) and the repository's
+fixed CI debug key. It can coexist with the earlier differently signed TV test app.
+
+The viewer targets Frigate 0.18 desktop markup. The TV menu exposes groups, recordings,
+and native Phylax settings. Server administration links are hidden only in this viewer.
+Group streaming preferences are still edited and saved through Frigate's own forms.
+
+Android consumes each remote key once and delegates web commands to one active scope.
+Nested dialogs and Radix select menus retain their opener and restore focus on return.
+Native settings, system dialogs, and the keyboard keep Android's native input handling.
+No external JavaScript-to-Android bridge is exposed by the TV controller.
+
+Run the browser regression fixture in `tests/tv` with `npm ci`, install Playwright's
+Chromium browser, and run `node test.cjs`. It covers actual Radix nested dialogs/selects,
+directional camera navigation, scrolling, and suppression of background Escape shortcuts.
+This fixture does not replace physical TV/WebView or live camera playback testing.

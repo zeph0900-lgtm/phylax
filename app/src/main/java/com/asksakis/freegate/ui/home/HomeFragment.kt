@@ -1215,6 +1215,7 @@ class HomeFragment : Fragment() {
 
                     // Make Frigate's (otherwise no-op) PiP button enter Android system PiP.
                     view?.evaluateJavascript(PIP_INTERCEPT_JS, null)
+                    if (view != null) installTvRemote(view)
                 }
 
                 override fun onReceivedError(
@@ -1551,6 +1552,8 @@ class HomeFragment : Fragment() {
     }
     
     override fun onDestroyView() {
+        tvRemote?.dispose()
+        tvRemote = null
         // Clean up fullscreen mode if active (the player view is attached to the
         // window decor, so remove it from there).
         if (customView != null) {
@@ -1763,6 +1766,26 @@ class HomeFragment : Fragment() {
     /**
      * Handles app navigation when there's no more WebView history
      */
+    private var tvRemote: com.asksakis.freegate.tv.TvRemoteController? = null
+
+    private fun installTvRemote(web: WebView) {
+        if (web.url?.startsWith("http") != true || mainFrameInErrorState) return
+        if (tvRemote == null) {
+            tvRemote = com.asksakis.freegate.tv.TvRemoteController(web,
+                { findNavController().navigate(R.id.nav_settings) },
+                { activity?.finish() })
+        }
+        tvRemote?.install()
+        _binding?.swipeRefresh?.isEnabled = false
+    }
+
+    fun dispatchTvKey(event: android.view.KeyEvent): Boolean {
+        val b = _binding ?: return false
+        if (b.connectingOverlay.visibility == View.VISIBLE ||
+            b.setupEmptyState.visibility == View.VISIBLE || customView != null) return false
+        return tvRemote?.dispatch(event) ?: false
+    }
+
     private fun handleBackNavigation() {
         // Just finish the activity normally instead of force-killing the process
         activity?.finish()
@@ -1775,6 +1798,12 @@ class HomeFragment : Fragment() {
                 if (customView != null) {
                     Log.d(TAG, "Back pressed in fullscreen mode - exiting fullscreen")
                     binding.webView.webChromeClient?.onHideCustomView()
+                    return
+                }
+
+                if (tvRemote != null && _binding?.connectingOverlay?.visibility != View.VISIBLE &&
+                    _binding?.setupEmptyState?.visibility != View.VISIBLE) {
+                    tvRemote?.back()
                     return
                 }
 
