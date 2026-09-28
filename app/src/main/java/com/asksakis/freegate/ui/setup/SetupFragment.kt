@@ -86,6 +86,10 @@ class SetupFragment : Fragment(R.layout.fragment_setup) {
 
         testButton.setOnClickListener { onTest() }
         saveButton.setOnClickListener { onSave() }
+
+        if (com.asksakis.freegate.ui.home.TvRemoteNavigator.isTelevision(requireContext())) {
+            urlInput.post { urlInput.requestFocus() }
+        }
     }
 
     /** Normalise the primary URL. Local Frigate installs are http by default. */
