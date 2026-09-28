@@ -38,8 +38,8 @@ android {
         applicationId = "com.asksakis.freegate.tw"
         minSdk = 29
         targetSdk = 35
-        versionCode = 21
-        versionName = "2.13"
+        versionCode = 2101
+        versionName = "2.13-TW1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
