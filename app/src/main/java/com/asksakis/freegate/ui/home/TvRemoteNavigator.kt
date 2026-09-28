@@ -9,10 +9,10 @@ import android.webkit.WebView
 /**
  * Lightweight D-pad bridge for Android TV.
  *
- * Frigate is rendered inside a WebView and its React UI does not expose reliable
+ * Frigate is rendered inside a WebView and its React/Radix UI does not expose reliable
  * Android TV focus navigation. This bridge activates only on TV devices, discovers
- * both native focusables and pointer-clickable React containers, and performs simple
- * spatial navigation without changing phone behavior.
+ * native and semantic controls, keeps focus inside the top-most dialog/popover, and
+ * performs spatial navigation without changing phone behavior.
  */
 object TvRemoteNavigator {
 
@@ -123,7 +123,34 @@ object TvRemoteNavigator {
             '[tabindex]:not([tabindex="-1"])'
           ].join(',');
 
+          var semanticSelector = [
+            'label[for]',
+            '[aria-label]',
+            '[aria-labelledby]',
+            '[aria-haspopup]',
+            '[aria-controls]',
+            '[aria-expanded]',
+            '[aria-checked]',
+            '[aria-selected]',
+            '[data-state]',
+            '[data-slot]',
+            '[data-radix-collection-item]',
+            '[title]',
+            '[onclick]',
+            '.cursor-pointer'
+          ].join(',');
+
+          var overlaySelector = [
+            '[role="dialog"]',
+            '[role="menu"]',
+            '[role="listbox"]',
+            '[data-radix-popper-content-wrapper]',
+            '[data-radix-menu-content]',
+            '[data-radix-dialog-content]'
+          ].join(',');
+
           var cached = [];
+          var cachedScope = null;
           var refreshTimer = null;
 
           function visible(el) {
@@ -131,9 +158,21 @@ object TvRemoteNavigator {
             if (el.getAttribute('aria-disabled') === 'true') return false;
             var s = window.getComputedStyle(el);
             if (s.display === 'none' || s.visibility === 'hidden') return false;
-            if (s.pointerEvents === 'none') return false;
+            if (parseFloat(s.opacity || '1') < 0.05) return false;
             var r = el.getBoundingClientRect();
-            return r.width > 6 && r.height > 6;
+            return r.width > 6 && r.height > 6 &&
+              r.bottom > 0 && r.right > 0 &&
+              r.top < window.innerHeight && r.left < window.innerWidth;
+          }
+
+          function depth(el) {
+            var d = 0;
+            var p = el;
+            while (p && p !== document.body) {
+              d += 1;
+              p = p.parentElement;
+            }
+            return d;
           }
 
           function nativeFocusable(el) {
@@ -144,16 +183,40 @@ object TvRemoteNavigator {
             }
           }
 
+          function semanticInteractive(el) {
+            try {
+              return el.matches(semanticSelector);
+            } catch (e) {
+              return false;
+            }
+          }
+
+          function activeScope() {
+            var overlays = Array.prototype.slice.call(
+              document.querySelectorAll(overlaySelector)
+            ).filter(visible);
+
+            if (!overlays.length) return document;
+
+            overlays.sort(function(a, b) {
+              var za = parseInt(window.getComputedStyle(a).zIndex || '0', 10);
+              var zb = parseInt(window.getComputedStyle(b).zIndex || '0', 10);
+              if (za !== zb) return za - zb;
+              return depth(a) - depth(b);
+            });
+            return overlays[overlays.length - 1];
+          }
+
           function looksClickable(el) {
             if (!visible(el)) return false;
-            if (nativeFocusable(el)) return true;
-            if (el.hasAttribute('onclick')) return true;
+            if (nativeFocusable(el) || semanticInteractive(el)) return true;
 
             var cls = String(el.className || '');
             if (cls.indexOf('cursor-pointer') >= 0) return true;
 
             var tag = (el.tagName || '').toLowerCase();
-            if (tag !== 'div' && tag !== 'section' && tag !== 'article' && tag !== 'li') {
+            if (tag !== 'div' && tag !== 'section' &&
+                tag !== 'article' && tag !== 'li') {
               return false;
             }
 
@@ -164,6 +227,13 @@ object TvRemoteNavigator {
             }
           }
 
+          function priority(el) {
+            if (nativeFocusable(el)) return 4;
+            if (semanticInteractive(el)) return 3;
+            if (String(el.className || '').indexOf('cursor-pointer') >= 0) return 2;
+            return 1;
+          }
+
           function nearlySameRect(a, b) {
             return Math.abs(a.left - b.left) < 3 &&
               Math.abs(a.top - b.top) < 3 &&
@@ -171,16 +241,38 @@ object TvRemoteNavigator {
               Math.abs(a.height - b.height) < 3;
           }
 
+          function poolFor(scope) {
+            var query = nativeSelector + ',' + semanticSelector +
+              ',div,section,article,li';
+            return Array.prototype.slice.call(scope.querySelectorAll(query));
+          }
+
           function rebuild() {
-            var pool = Array.prototype.slice.call(
-              document.querySelectorAll(nativeSelector + ',[onclick],div,section,article,li')
-            );
+            var scope = activeScope();
+            var pool = poolFor(scope).filter(looksClickable);
+
+            pool.sort(function(a, b) {
+              var pa = priority(a);
+              var pb = priority(b);
+              if (pa !== pb) return pb - pa;
+
+              var ar = a.getBoundingClientRect();
+              var br = b.getBoundingClientRect();
+              var aa = ar.width * ar.height;
+              var ba = br.width * br.height;
+              if (Math.abs(aa - ba) > 20) return aa - ba;
+              return depth(b) - depth(a);
+            });
 
             var list = [];
             pool.forEach(function(el) {
-              if (!looksClickable(el)) return;
-
               var r = el.getBoundingClientRect();
+              var huge = r.width * r.height >
+                window.innerWidth * window.innerHeight * 0.55;
+              if (huge && !nativeFocusable(el) && !semanticInteractive(el)) {
+                return;
+              }
+
               var duplicate = list.some(function(existing) {
                 return nearlySameRect(existing.getBoundingClientRect(), r);
               });
@@ -193,13 +285,18 @@ object TvRemoteNavigator {
               list.push(el);
             });
 
+            cachedScope = scope;
             cached = list;
             return cached;
           }
 
           function candidates() {
+            var scope = activeScope();
+            if (scope !== cachedScope) return rebuild();
+
             var list = cached.filter(function(el) {
-              return document.contains(el) && visible(el);
+              return document.contains(el) && visible(el) &&
+                (scope === document || scope.contains(el));
             });
             if (!list.length) list = rebuild();
             return list;
@@ -232,12 +329,21 @@ object TvRemoteNavigator {
           }
 
           function focusFirst() {
-            var list = ordered(candidates());
+            var list = ordered(rebuild());
             if (!list.length) return false;
             return focusElement(list[0]);
           }
 
-          function directionalCandidate(list, current, dir) {
+          function zone(el) {
+            var r = el.getBoundingClientRect();
+            var cy = r.top + r.height / 2;
+            var h = window.innerHeight;
+            if (cy < h * 0.23) return 'top';
+            if (cy > h * 0.77) return 'bottom';
+            return 'content';
+          }
+
+          function directionalCandidate(list, current, dir, restrictZone) {
             var r = current.getBoundingClientRect();
             var cx = r.left + r.width / 2;
             var cy = r.top + r.height / 2;
@@ -247,6 +353,8 @@ object TvRemoteNavigator {
 
             list.forEach(function(el) {
               if (el === current) return;
+              if (restrictZone && zone(el) !== restrictZone) return;
+
               var t = el.getBoundingClientRect();
               var tx = t.left + t.width / 2;
               var ty = t.top + t.height / 2;
@@ -271,16 +379,25 @@ object TvRemoteNavigator {
             return best;
           }
 
-          function edgeCandidate(list, dir) {
-            var sorted = list.slice().sort(function(a, b) {
-              var ar = a.getBoundingClientRect();
-              var br = b.getBoundingClientRect();
-              if (dir === 'up') return br.bottom - ar.bottom;
-              if (dir === 'down') return ar.top - br.top;
-              if (dir === 'left') return br.right - ar.right;
-              return ar.left - br.left;
+          function nearestInZone(list, current, targetZone) {
+            var r = current.getBoundingClientRect();
+            var cx = r.left + r.width / 2;
+            var cy = r.top + r.height / 2;
+            var best = null;
+            var bestScore = Number.POSITIVE_INFINITY;
+
+            list.forEach(function(el) {
+              if (el === current || zone(el) !== targetZone) return;
+              var t = el.getBoundingClientRect();
+              var tx = t.left + t.width / 2;
+              var ty = t.top + t.height / 2;
+              var score = Math.abs(tx - cx) * 0.35 + Math.abs(ty - cy);
+              if (score < bestScore) {
+                bestScore = score;
+                best = el;
+              }
             });
-            return sorted[0] || null;
+            return best;
           }
 
           function move(dir) {
@@ -290,8 +407,33 @@ object TvRemoteNavigator {
             var current = document.activeElement;
             if (list.indexOf(current) < 0) return focusFirst();
 
-            var best = directionalCandidate(list, current, dir);
-            if (best) return focusElement(best);
+            var currentZone = zone(current);
+            var best = directionalCandidate(list, current, dir, null);
+
+            if (best) {
+              if (dir === 'up' && currentZone === 'bottom' &&
+                  zone(best) === 'bottom') {
+                best = nearestInZone(list, current, 'content') ||
+                  nearestInZone(list, current, 'top') || best;
+              } else if (dir === 'down' && currentZone === 'top' &&
+                  zone(best) === 'top') {
+                best = nearestInZone(list, current, 'content') ||
+                  nearestInZone(list, current, 'bottom') || best;
+              }
+              return focusElement(best);
+            }
+
+            if (dir === 'up' && currentZone === 'bottom') {
+              best = nearestInZone(list, current, 'content') ||
+                nearestInZone(list, current, 'top');
+              if (best) return focusElement(best);
+            }
+
+            if (dir === 'down' && currentZone === 'top') {
+              best = nearestInZone(list, current, 'content') ||
+                nearestInZone(list, current, 'bottom');
+              if (best) return focusElement(best);
+            }
 
             var horizontal = dir === 'left' || dir === 'right';
             var amount = Math.round(
@@ -305,8 +447,7 @@ object TvRemoteNavigator {
 
             window.setTimeout(function() {
               var refreshed = rebuild();
-              var next = directionalCandidate(refreshed, current, dir) ||
-                edgeCandidate(refreshed, dir);
+              var next = directionalCandidate(refreshed, current, dir, null);
               if (next) focusElement(next);
             }, 90);
             return true;
@@ -318,14 +459,25 @@ object TvRemoteNavigator {
               return focusFirst();
             }
 
-            if (typeof el.click === 'function') {
-              el.click();
-              return true;
+            if ((el.tagName || '').toLowerCase() === 'label') {
+              var targetId = el.getAttribute('for');
+              var target = targetId ? document.getElementById(targetId) : null;
+              if (target && typeof target.click === 'function') {
+                target.click();
+                return true;
+              }
             }
 
-            var parent = el.closest(nativeSelector + ',[onclick],.cursor-pointer');
-            if (parent && typeof parent.click === 'function') {
-              parent.click();
+            if (typeof el.click === 'function') {
+              el.click();
+              window.setTimeout(function() {
+                rebuild();
+                var scope = activeScope();
+                if (scope !== document && !scope.contains(document.activeElement)) {
+                  var scoped = ordered(candidates());
+                  if (scoped.length) focusElement(scoped[0]);
+                }
+              }, 100);
               return true;
             }
             return false;
@@ -333,7 +485,7 @@ object TvRemoteNavigator {
 
           function scheduleRefresh() {
             if (refreshTimer) window.clearTimeout(refreshTimer);
-            refreshTimer = window.setTimeout(rebuild, 120);
+            refreshTimer = window.setTimeout(rebuild, 100);
           }
 
           var observer = new MutationObserver(scheduleRefresh);
@@ -341,7 +493,16 @@ object TvRemoteNavigator {
             childList: true,
             subtree: true,
             attributes: true,
-            attributeFilter: ['class', 'role', 'tabindex', 'aria-disabled']
+            attributeFilter: [
+              'class',
+              'role',
+              'tabindex',
+              'aria-disabled',
+              'aria-expanded',
+              'aria-selected',
+              'aria-checked',
+              'data-state'
+            ]
           });
 
           rebuild();
