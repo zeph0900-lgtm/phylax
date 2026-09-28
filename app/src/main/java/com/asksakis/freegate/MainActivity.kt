@@ -292,12 +292,26 @@ class MainActivity : AppCompatActivity(),
             as? com.asksakis.freegate.ui.home.HomeFragment
     }
 
+    private val tvConsumedKeys = mutableSetOf<Int>()
+
     override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
+        if (event.action == android.view.KeyEvent.ACTION_UP && tvConsumedKeys.remove(event.keyCode)) return true
         val imeVisible = androidx.core.view.ViewCompat.getRootWindowInsets(binding.root)
             ?.isVisible(WindowInsetsCompat.Type.ime()) == true
         if (!imeVisible && ::navController.isInitialized &&
             navController.currentDestination?.id == R.id.nav_home &&
-            currentHomeFragment()?.dispatchTvKey(event) == true) return true
+            currentHomeFragment()?.dispatchTvKey(event) == true) {
+            if (event.action == android.view.KeyEvent.ACTION_DOWN) tvConsumedKeys.add(event.keyCode)
+            return true
+        }
+        if (!imeVisible && event.keyCode == android.view.KeyEvent.KEYCODE_MENU &&
+            event.action == android.view.KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
+            tvConsumedKeys.add(event.keyCode)
+            if (::navController.isInitialized && navController.currentDestination?.id == R.id.nav_home) {
+                navController.navigate(R.id.nav_settings)
+            }
+            return true
+        }
         return super.dispatchKeyEvent(event)
     }
 

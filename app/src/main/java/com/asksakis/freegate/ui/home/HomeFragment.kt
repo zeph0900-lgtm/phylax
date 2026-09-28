@@ -316,6 +316,9 @@ class HomeFragment : Fragment() {
         setupWebView()
         setupFileChooserLauncher()
         setupBackButtonHandler()
+        binding.connectingSettings.setOnClickListener {
+            findNavController().navigate(R.id.nav_settings)
+        }
 
         // Decide up front: if we have credentials, suppress the URL observer's initial
         // load. primeFrigateSessionAsync will perform the single authenticated load
@@ -395,6 +398,7 @@ class HomeFragment : Fragment() {
         binding.connectingSubtitle.visibility =
             if (profileName.isNullOrBlank()) View.GONE else View.VISIBLE
         binding.connectingOverlay.visibility = View.VISIBLE
+        binding.connectingSettings.requestFocus()
     }
 
     /**
@@ -421,6 +425,7 @@ class HomeFragment : Fragment() {
         if (onRetry != null) {
             binding.connectingRetry.visibility = View.VISIBLE
             binding.connectingRetry.setOnClickListener { onRetry() }
+            binding.connectingRetry.requestFocus()
         } else {
             binding.connectingRetry.visibility = View.GONE
             binding.connectingRetry.setOnClickListener(null)

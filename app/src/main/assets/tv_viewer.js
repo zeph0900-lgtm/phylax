@@ -8,8 +8,8 @@
   const MODALS = '[role=dialog],[role=alertdialog],[role=menu],[role=listbox]';
   const state = { stack: [], active: null, opener: null, suspended: false,
     restore: null, lastCard: null, lastContent: null, editing: null, custom: null,
-    config: null, base: null, group: null, rootBack: false, pending: '', timer: 0,
-    nav: null, ready: false, bootstrap: false, route: location.pathname + location.hash };
+    config: null, profile: null, base: null, group: null, rootBack: false, pending: '', timer: 0,
+    nav: null, cinema: false, entering: false, single: '', ready: false, bootstrap: false, route: location.pathname + location.hash };
   const style = document.createElement('style');
   style.textContent = `
     [data-tv-focus]:focus { outline:4px solid #ffb300!important; outline-offset:-3px!important; box-shadow:0 0 0 2px #101820!important; }
@@ -24,6 +24,13 @@
     body[data-tv-viewer] aside { display:none!important; }
     body[data-tv-viewer] #root { padding-top:58px;box-sizing:border-box; }
     [role=dialog] { max-width:85vw!important; } [role=dialog] button { min-height:36px; }
+    [data-tv-live-controls] { display:none!important; }
+    body[data-tv-cinema] #tv-nav,body[data-tv-cinema] #tv-single-controls { display:none!important; }
+    #tv-single-controls { display:flex;gap:12px;padding:8px;min-height:52px; }
+    #tv-single-controls button { padding:8px 18px;background:#223b53;color:white;border-radius:8px;font-size:18px; }
+    body[data-tv-cinema] #pageRoot { top:0!important;bottom:0!important; }
+    #tv-playback { display:flex;gap:8px;position:fixed;bottom:38px;left:50%;transform:translateX(-50%);z-index:35;background:#13283e;padding:8px;border-radius:8px;color:white; }
+    #tv-playback button { min-height:40px;min-width:95px;padding:6px;background:#294963;color:white;border-radius:5px; }
     [data-tv-icon] { min-width:36px;min-height:36px;display:flex;align-items:center;justify-content:center; }
   `;
   document.head.append(style);
@@ -68,6 +75,7 @@
   function collect(root = scope()) {
     let list = arr(root, SELECTORS).filter(el => {
       if (!shown(el,true) || el.closest('aside')) return false;
+      if (state.single && el.matches('[data-camera]')) return false;
       if (el.matches('input[type=checkbox]') && el.getAttribute('aria-hidden') === 'true') return false;
       // A camera is a single selectable card. Its decorative nested divs aren't controls.
       if (el.closest('[data-camera]') !== el && el.closest('[data-camera]') && !el.matches('button,a,input')) return false;
@@ -127,7 +135,13 @@
     } else if (el.matches('[role=option],[role=menuitem]')) {
       dispatchKey(el,'Enter');
     } else {
-      el.click();
+      const r=el.getBoundingClientRect();
+      const x=Math.max(1,Math.min(innerWidth-1,r.x+r.width/2));
+      const y=Math.max(1,Math.min(innerHeight-1,r.y+r.height/2));
+      const hit=document.elementFromPoint(x,y);
+      // TooltipTrigger may wrap a div owning the actual React click handler.
+      const target=hit && el.contains(hit)?hit:el;
+      target.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,clientX:x,clientY:y,view:window}));
     }
     setTimeout(refresh,40);
   }
@@ -184,10 +198,19 @@
     const list=collect(root), current=document.activeElement;
     if (!list.includes(current)) { focus(first(root));return; }
     if (state.editing===current) {
-      const stop=e=>e.stopPropagation();
-      current.addEventListener('keydown',stop);current.addEventListener('keyup',stop);
-      dispatchKey(current,{left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[dir]);
-      current.removeEventListener('keydown',stop);current.removeEventListener('keyup',stop);return;
+      const arrow={left:'ArrowLeft',right:'ArrowRight',up:'ArrowUp',down:'ArrowDown'}[dir];
+      if(current.matches('input[type=range]')) {
+        const step=Number(current.step)||1, sign=dir==='left'||dir==='down'?-1:1;
+        const value=Math.max(Number(current.min)||0,Math.min(Number(current.max)||100,Number(current.value)+sign*step));
+        Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(current,String(value));
+        current.dispatchEvent(new Event('input',{bubbles:true}));current.dispatchEvent(new Event('change',{bubbles:true}));
+      } else {
+        // Frigate's document keyboard listener explicitly ignores INPUT targets.
+        // Radix still receives the bubbling key on its slider root, with no page seek.
+        const proxy=document.createElement('input');proxy.type='text';proxy.hidden=true;proxy.tabIndex=-1;
+        current.append(proxy);dispatchKey(proxy,arrow);proxy.remove();
+      }
+      return;
     }
     const r=current.getBoundingClientRect(), cx=r.x+r.width/2,cy=r.y+r.height/2;
     const horizontal=dir==='left'||dir==='right';
@@ -227,9 +250,11 @@
   async function loadConfig() {
     const base=basePath();if (!base) return;
     try {
-      const res=await fetch(base.replace(/\/?$/,'/')+'api/config',{credentials:'same-origin'});
+      const res=await fetch(base.replace(/\/?$/,'/')+'api/config',{credentials:'same-origin',signal:AbortSignal.timeout(5000)});
       if (!res.ok) return;
       state.config=await res.json();
+      const profile=await fetch(base.replace(/\/?$/,'/')+'api/profile',{credentials:'same-origin',signal:AbortSignal.timeout(5000)});
+      if(profile.ok) state.profile=await profile.json();
     } catch (_) { /* keep existing UI usable if the config request fails */ }
   }
   function groups() {
@@ -253,7 +278,7 @@
     }
     const buttons=groupButtons();
     const edit=buttons.at(-1);
-    if (edit && edit.querySelector('svg') && buttons.length>=2) activateHidden(edit);
+    if (edit && edit.querySelector('svg') && edit.classList.contains('text-muted-foreground') && buttons.length>=2) activateHidden(edit);
     else hint('此帳號沒有群組編輯入口，或頁面尚未載入');
   }
   function activateHidden(el) {state.opener=state.nav?.querySelector('button');el.click();setTimeout(refresh,80);}
@@ -272,7 +297,7 @@
     const title=document.createElement('span');title.id='tv-title';nav.append(title);document.body.append(nav);state.nav=nav;
     // Hide the sidebar's reserved 52px gutter without changing the Frigate component tree.
     const sidebar=document.querySelector('aside');
-    const content=sidebar?.parentElement?.querySelector(':scope > div.absolute');
+    const content=document.getElementById('pageRoot');
     if(content) {content.style.top='58px';content.style.left='0';}
     const main=document.querySelector('main');if (main) {main.style.marginLeft='0';main.style.paddingLeft='8px';}
     loadConfig().then(()=> {
@@ -299,7 +324,27 @@
     arr(document,'button[aria-label="Enter layout editing mode"]').forEach(el=>el.dataset.tvHidden='');
     arr(document,'[data-camera]').forEach(el=> {el.tabIndex=0;el.setAttribute('role','button');el.dataset.tvFocus='';});
     if (state.nav) document.getElementById('tv-title').textContent=document.title;
-    const camera=location.hash.slice(1);
+    const camera=location.pathname===basePath()?location.hash.slice(1):'';
+    const player=document.getElementById('player-container');
+    if(camera && player) {
+      const controls=player.parentElement.querySelector('[data-tv-live-controls]')||player.previousElementSibling;
+      if(controls && controls.id!=='tv-single-controls') controls.dataset.tvLiveControls='';
+      if(!document.getElementById('tv-single-controls') && controls) {
+        const bar=document.createElement('div');bar.id='tv-single-controls';
+        const entries=[['聲音',()=>dispatchKey(document.body,'m')],['串流設定',()=>{
+          const trigger=controls.querySelector('button[aria-haspopup=menu]');
+          if(trigger) {state.opener=document.activeElement;dispatchKey(trigger,'Enter');setTimeout(refresh,60);}
+          else hint('此鏡頭目前沒有串流設定入口');
+        }],['此鏡頭回放',()=>{
+          const buttons=arr(controls,'button[aria-label]');
+          const historyButton=buttons[1];if(historyButton) historyButton.click();else route('review');
+        }]];
+        for(const [text,action] of entries) {const b=document.createElement('button');b.textContent=text;b.onclick=action;bar.append(b);}
+        player.before(bar);
+      }
+      if(state.single!==camera) {state.single=camera;state.cinema=true;document.body.dataset.tvCinema='';}
+    } else if(state.single) {state.single='';state.cinema=false;delete document.body.dataset.tvCinema;}
+    playbackBar();
     if (state.lastCard && !camera && location.pathname===basePath() && state.route!==location.pathname+location.hash) {
       const el=arr(document,'[data-camera]').find(x=>x.dataset.camera===state.lastCard);if(el) focus(el);
     }
@@ -316,6 +361,7 @@
   function back() {
     if (state.editing) {state.editing=null;hint('已結束調整');return 'handled';}
     if (closeLayer()) return 'handled';
+    if(state.single && !state.cinema) {state.cinema=true;document.body.dataset.tvCinema='';document.activeElement?.blur();return 'handled';}
     if (document.fullscreenElement) {document.exitFullscreen();return 'handled';}
     if (location.hash || location.pathname!==basePath()) {
       state.restore=state.lastCard;
@@ -326,14 +372,64 @@
     return 'exit';
   }
   function playback(cmd) {
+    if(scope()!==document || location.pathname===basePath()) return;
     const video=arr(document,'video').find(el=>shown(el));
-    if (!video) {hint('請先開啟一段錄影');return;}
-    if(cmd==='play') {if(video.paused) video.play().catch(()=>{});else video.pause();}
-    else if (location.pathname!==basePath() && Number.isFinite(video.duration)) video.currentTime=Math.max(0,Math.min(video.duration,video.currentTime+(cmd==='forward'?10:-10)));
+    if(!video) {hint('請先開啟一段錄影');return;}
+    // Use Frigate's own keyboard contracts so seeks cross recording segments correctly.
+    dispatchKey(document.body,cmd==='play'?' ':cmd==='forward'?'ArrowRight':'ArrowLeft');
+  }
+  function playbackBar() {
+    const active=location.pathname!==basePath() && arr(document,'video').some(el=>shown(el));
+    let bar=document.getElementById('tv-playback');
+    if(!active) {bar?.remove();return;}
+    if(bar) return;
+    bar=document.createElement('div');bar.id='tv-playback';
+    for(const [title,cmd] of [['倒退 10 秒','rewind'],['播放／暫停','play'],['前進 10 秒','forward']]) {
+      const b=document.createElement('button');b.textContent=title;b.onclick=()=>playback(cmd);bar.append(b);
+    }
+    document.body.append(bar);
+  }
+  async function enterCamera(el) {
+    if(state.entering) return;state.entering=true;
+    state.lastCard=el.dataset.camera;state.restore=el.dataset.camera;
+    // Frigate 0.18 stores local streaming settings in idb-keyval, scoped by username.
+    // Copy ONLY this group's chosen source into the single-camera preference before mounting it.
+    try {
+      const base=basePath();
+      if(state.profile) {
+        const user=state.profile.username;
+        const suffix=user && user!=='anonymous'?':'+user:'';
+        const databases=await indexedDB.databases();
+        if(databases.some(db=>db.name==='keyval-store')) await new Promise(resolve=>{
+          const request=indexedDB.open('keyval-store');
+          request.onerror=()=>resolve();
+          request.onsuccess=()=>{
+            const db=request.result;
+            if(!db.objectStoreNames.contains('keyval')) {db.close();resolve();return;}
+            const tx=db.transaction('keyval','readwrite'),store=tx.objectStore('keyval');
+            const get=store.get('streaming-settings'+suffix);
+            get.onsuccess=()=>{
+              const group=history.state?.usr?.cameraGroup||state.group;
+              const stream=get.result?.[group]?.[el.dataset.camera]?.streamName;
+              const allowed=Object.values(state.config?.cameras?.[el.dataset.camera]?.live?.streams||{});
+              if(stream && allowed.includes(stream)) store.put(stream,el.dataset.camera+'-stream'+suffix);
+            };
+            tx.oncomplete=tx.onerror=tx.onabort=()=>{db.close();resolve();};
+          };
+        });
+      }
+    } catch(_) { /* unavailable storage: keep Frigate's existing single-camera preference */ }
+    state.entering=false;activate(el);
   }
   function key(command) {
     if (state.suspended) return 'handled';
     refresh();
+    if(state.entering) return 'handled';
+    if(state.single && state.cinema && command!=='back' && scope()===document) {
+      state.cinema=false;delete document.body.dataset.tvCinema;
+      focus(document.querySelector('#tv-single-controls button') || first(document));
+      return 'handled';
+    }
     if (command==='back') return back();
     if (command==='menu') {if(scope()===document) focus(state.nav?.querySelector('button'));return 'handled';}
     if (['up','down','left','right'].includes(command)) move(command);
@@ -343,7 +439,7 @@
       if(!el || !collect().includes(el)) {focus(first(scope()));return 'handled';}
       if (el.matches('input:not([type=checkbox]):not([type=radio]):not([type=range]),textarea')) {el.focus();el.click();return 'ime';}
       if(el.matches('[role=slider],input[type=range]')) {state.editing=state.editing===el?null:el;hint(state.editing?'左右調整，OK 或返回結束':'已結束調整');return 'handled';}
-      if(el.dataset.camera) {state.lastCard=el.dataset.camera;state.restore=el.dataset.camera;}
+      if(el.dataset.camera && !state.single) {enterCamera(el);return 'handled';}
       if(el.matches('[role=switch],[role=checkbox]') && topFrame()?.root!==document) topFrame().dirty=true;
       activate(el);
     }
