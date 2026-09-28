@@ -17,6 +17,13 @@ android {
     compileSdk = 35
 
     signingConfigs {
+        getByName("debug") {
+            // Use the repository test key directly; runner home locations can differ.
+            storeFile = rootProject.file(".ci/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
         create("release") {
             // Local dev reads from local.properties; CI injects via env vars. Falling
             // through to env keeps the gradle file itself free of any secret material.
