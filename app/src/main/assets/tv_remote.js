@@ -165,7 +165,9 @@
   }
 
   function fixedFullscreenLayers() {
-    const all = Array.prototype.slice.call(document.body.querySelectorAll("*"));
+    const all = Array.prototype.slice.call(
+      document.querySelectorAll("[class*='fixed'][class*='inset-0']")
+    );
     return all.filter(function (el) {
       if (!visible(el)) return false;
       const s = window.getComputedStyle(el);
@@ -184,25 +186,26 @@
       document.querySelectorAll(POPUP)
     ).filter(visible);
 
+    if (popups.length) {
+      popups.sort(function (a, b) {
+        const za = zIndex(a);
+        const zb = zIndex(b);
+        if (za !== zb) return za - zb;
+        return depth(a) - depth(b);
+      });
+      return popups[popups.length - 1];
+    }
+
     const layers = fixedFullscreenLayers();
-    const scopes = popups.concat(layers);
+    if (!layers.length) return document;
 
-    if (!scopes.length) return document;
-
-    scopes.sort(function (a, b) {
+    layers.sort(function (a, b) {
       const za = zIndex(a);
       const zb = zIndex(b);
       if (za !== zb) return za - zb;
-
-      const ar = a.getBoundingClientRect();
-      const br = b.getBoundingClientRect();
-      const aa = ar.width * ar.height;
-      const ba = br.width * br.height;
-      if (Math.abs(aa - ba) > 100) return aa - ba;
       return depth(a) - depth(b);
     });
-
-    return scopes[scopes.length - 1];
+    return layers[layers.length - 1];
   }
 
   function nativeFocusable(el) {
@@ -257,7 +260,7 @@
 
   function poolFor(scope) {
     const query = NATIVE + "," + SEMANTIC +
-      ",div,section,article,li,span";
+      ",div,section,article,li";
     return Array.prototype.slice.call(scope.querySelectorAll(query));
   }
 
@@ -695,9 +698,8 @@
     subtree: true,
     attributes: true,
     attributeFilter: [
-      "class",
       "role",
-      "tabindex",
+      "disabled",
       "aria-disabled",
       "aria-expanded",
       "aria-selected",
