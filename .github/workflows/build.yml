@@ -35,6 +35,9 @@ jobs:
           mkdir -p $HOME/.android
           cp ./.ci/debug.keystore $HOME/.android/debug.keystore
 
+      - name: Test native TV setup navigation
+        run: ./gradlew app:testGithubDebugUnitTest --stacktrace
+
       - name: Execute APK build
         # Only the github flavor for CI; fdroid builds are driven by F-Droid's own
         # build server from the fdroiddata metadata.

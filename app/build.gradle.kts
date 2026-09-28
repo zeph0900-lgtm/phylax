@@ -45,8 +45,8 @@ android {
         applicationId = "com.asksakis.freegate.tw.tv.viewer"
         minSdk = 29
         targetSdk = 35
-        versionCode = 21302
-        versionName = "2.13-TV0.2"
+        versionCode = 21303
+        versionName = "2.13-TV0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -106,6 +106,8 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    testOptions { unitTests.isIncludeAndroidResources = true }
+
     buildFeatures {
         viewBinding = true
         buildConfig = true
@@ -150,6 +152,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     
     testImplementation(libs.junit)
+    testImplementation("org.robolectric:robolectric:4.14.1")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

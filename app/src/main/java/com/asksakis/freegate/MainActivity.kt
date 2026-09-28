@@ -304,6 +304,12 @@ class MainActivity : AppCompatActivity(),
             if (event.action == android.view.KeyEvent.ACTION_DOWN) tvConsumedKeys.add(event.keyCode)
             return true
         }
+        val setup = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
+            ?.childFragmentManager?.primaryNavigationFragment as? com.asksakis.freegate.ui.setup.SetupFragment
+        if (!imeVisible && setup?.dispatchTvKey(event) == true) {
+            if (event.action == android.view.KeyEvent.ACTION_DOWN) tvConsumedKeys.add(event.keyCode)
+            return true
+        }
         if (!imeVisible && event.keyCode == android.view.KeyEvent.KEYCODE_MENU &&
             event.action == android.view.KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
             tvConsumedKeys.add(event.keyCode)

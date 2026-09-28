@@ -467,6 +467,13 @@ class HomeFragment : Fragment() {
         }
         binding.setupEmptyState.visibility = View.VISIBLE
         binding.setupEmptyState.bringToFront()
+        val controls = listOf(binding.setupAddServer, binding.setupDocs)
+        com.asksakis.freegate.tv.TvNativeNavigation.prepare(controls)
+        binding.setupAddServer.post {
+            if (_binding === binding && binding.setupEmptyState.visibility == View.VISIBLE) {
+                com.asksakis.freegate.tv.TvNativeNavigation.focusFirst(controls)
+            }
+        }
     }
 
     private fun hideSetupEmptyState() {
@@ -1786,8 +1793,15 @@ class HomeFragment : Fragment() {
 
     fun dispatchTvKey(event: android.view.KeyEvent): Boolean {
         val b = _binding ?: return false
-        if (b.connectingOverlay.visibility == View.VISIBLE ||
-            b.setupEmptyState.visibility == View.VISIBLE || customView != null) return false
+        if (b.setupEmptyState.visibility == View.VISIBLE) {
+            return com.asksakis.freegate.tv.TvNativeNavigation.dispatch(event, listOf(b.setupAddServer, b.setupDocs))
+        }
+        if (b.connectingOverlay.visibility == View.VISIBLE) {
+            val controls = listOf(b.connectingRetry, b.connectingSettings)
+            com.asksakis.freegate.tv.TvNativeNavigation.prepare(controls)
+            return com.asksakis.freegate.tv.TvNativeNavigation.dispatch(event, controls)
+        }
+        if (customView != null) return false
         return tvRemote?.dispatch(event) ?: false
     }
 
