@@ -1,0 +1,50 @@
+name: 清理 Actions（保留最新兩筆）
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 刪除舊執行紀錄
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          CURRENT_RUN: ${{ github.run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # 先取得全部紀錄，再開始刪除，避免分頁位移。
+          gh api --paginate \
+            "repos/$REPO/actions/runs?per_page=100" \
+            --jq '.workflow_runs[]' |
+            jq -s --arg current "$CURRENT_RUN" '
+              [
+                .[]
+                | select((.id | tostring) != $current)
+                | select(.status == "completed")
+              ]
+              | sort_by(.created_at, .id)
+              | reverse
+            ' > /tmp/action-runs.json
+
+          echo "保留以下最新兩筆已完成紀錄："
+          jq -r '.[0:2][] | "\(.id)  \(.name)  \(.created_at)"' \
+            /tmp/action-runs.json
+
+          mapfile -t OLD_RUNS < <(
+            jq -r '.[2:][] | .id' /tmp/action-runs.json
+          )
+
+          for RUN_ID in "${OLD_RUNS[@]}"; do
+            echo "刪除：$RUN_ID"
+            gh run delete "$RUN_ID" --repo "$REPO"
+          done
+
+          echo "清理完成，共刪除 ${#OLD_RUNS[@]} 筆。"
