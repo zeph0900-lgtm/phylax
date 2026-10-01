@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:text="Add server"
+        android:text="@string/servers_add"
         android:textColor="@color/accent_orange_on"
         app:icon="@drawable/ic_add_circle"
         app:iconTint="@color/accent_orange_on"

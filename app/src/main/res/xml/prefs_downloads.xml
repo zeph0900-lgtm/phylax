@@ -5,8 +5,8 @@
     <ListPreference
         android:key="download_location"
         android:icon="@drawable/ic_downloads_folder"
-        android:title="Download Location"
-        android:summary="Choose where to save downloaded videos and images"
+        android:title="@string/download_location_title"
+        android:summary="@string/download_location_summary"
         android:entries="@array/download_location_entries"
         android:entryValues="@array/download_location_values"
         android:defaultValue="downloads" />

@@ -6,6 +6,41 @@
     <string name="nav_header_subtitle">Viewer for Frigate NVR</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_close">Close</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="action_add">Add</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_not_now">Not now</string>
+    <string name="action_later">Later</string>
+    <string name="action_allow">Allow</string>
+    <string name="action_enable">Enable</string>
+    <string name="action_open">Open</string>
+    <string name="action_open_settings">Open settings</string>
+    <string name="action_test">Test</string>
+    <string name="action_ok">OK</string>
+    <string name="more_options">More</string>
+
+    <!-- Language -->
+    <string name="settings_general">General</string>
+    <string name="app_language_title">Language</string>
+    <string name="app_language_summary">Choose the language used by Phylax</string>
+    <string-array name="app_language_entries">
+        <item>Follow system</item>
+        <item>繁體中文（台灣）</item>
+        <item>English</item>
+    </string-array>
+    <string-array name="app_language_values" translatable="false">
+        <item>system</item>
+        <item>zh-TW</item>
+        <item>en</item>
+    </string-array>
+
+    <!-- Connection / startup -->
     <string name="connecting_title">Connecting</string>
     <string name="connecting_error_title">Can\'t reach server</string>
     <string name="connecting_error_no_url">No URL configured for this profile. Open Settings → Connection to add one.</string>
@@ -16,14 +51,17 @@
     <string name="connecting_error_timeout">Connection timed out.</string>
     <string name="connecting_error_ssl">Secure connection failed.</string>
     <string name="connecting_error_generic">Couldn\'t connect to the server.</string>
+    <string name="connection_failed">Connection failed</string>
+    <string name="connection_failed_error">Connection failed: %1$s</string>
+    <string name="dns_error">DNS error — cannot resolve host</string>
+    <string name="access_denied_403">Access denied (403)</string>
+    <string name="connection_timeout">Connection timeout</string>
 
-    <!-- First-run / unconfigured empty state -->
+    <!-- First-run / setup -->
     <string name="setup_empty_title">Connect to your Frigate server</string>
     <string name="setup_empty_subtitle">Phylax needs the address of your Frigate NVR to get started. Add your server and you\'re ready to go.</string>
     <string name="setup_empty_add_server">Add server</string>
     <string name="setup_empty_docs">Setup help</string>
-
-    <!-- Setup screen -->
     <string name="setup_title">Add your Frigate server</string>
     <string name="setup_url_hint">Frigate URL</string>
     <string name="setup_url_helper">e.g. http://frigate.local:5000 or https://frigate.example.com</string>
@@ -37,7 +75,262 @@
     <string name="setup_save">Save and connect</string>
     <string name="setup_testing">Testing connection…</string>
     <string name="setup_test_ok">Connection successful</string>
-    <string name="setup_docs_url">https://github.com/sfortis/phylax#readme</string>
+    <string name="setup_docs_url" translatable="false">https://github.com/sfortis/phylax#readme</string>
+    <string name="setup_valid_url_required">Enter a valid URL</string>
+    <string name="setup_location_title">Location for automatic switching</string>
+    <string name="setup_location_message">You added a separate local URL. Phylax reads your current Wi-Fi network name to switch between the local and remote URL automatically. It is used only for that — no GPS, no tracking. Grant location access?</string>
+
+    <!-- Navigation / top-level settings -->
+    <string name="menu_home">Phylax</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_settings">Settings</string>
+    <string name="settings_connection_title">Connection</string>
+    <string name="settings_connection_summary">URLs, network mode, account, mTLS</string>
+    <string name="settings_notifications_title">Notifications</string>
+    <string name="settings_notifications_summary">Alerts, cameras, background listener</string>
+    <string name="settings_downloads_title">Downloads</string>
+    <string name="settings_downloads_summary">Where videos and images are saved</string>
+    <string name="settings_advanced_title">Advanced</string>
+    <string name="settings_advanced_summary">Audio processing and advanced options</string>
+    <string name="settings_about_title">About</string>
+    <string name="settings_about_summary">Source code, license, support the project</string>
+    <string name="settings_servers_title">Servers</string>
+
+    <!-- Connection settings -->
+    <string name="server_title">Server</string>
+    <string name="urls_title">URLs</string>
+    <string name="internal_url_title">Internal URL</string>
+    <string name="internal_url_summary">URL when on home network</string>
+    <string name="external_url_title">External URL</string>
+    <string name="external_url_summary">URL when not on home network</string>
+    <string name="network_mode_title">Network Mode</string>
+    <string name="connection_mode_title">Connection Mode</string>
+    <string name="connection_mode_summary">Select which URL to use</string>
+    <string name="current_status_title">Current Status</string>
+    <string name="checking_network_status">Checking network status…</string>
+    <string name="wifi_networks_title">Home Wi-Fi Networks</string>
+    <string name="wifi_networks_summary">Networks treated as home</string>
+    <string name="wifi_networks_dialog">Select home networks</string>
+    <string name="add_home_network_title">Add a home network</string>
+    <string name="add_home_network_summary">Enter a Wi-Fi SSID manually</string>
+    <string name="frigate_account_title">Frigate Account</string>
+    <string name="username_title">Username</string>
+    <string name="username_summary">Frigate UI username</string>
+    <string name="password_title">Password</string>
+    <string name="password_summary">Frigate UI password (stored encrypted)</string>
+    <string name="client_certificate_title">Client certificate (mTLS)</string>
+    <string name="not_selected">Not selected</string>
+    <string name="strict_tls_title">Strict TLS on external URL</string>
+    <string name="strict_tls_summary">Require a trusted certificate for the public URL. Disable if your Frigate uses a self-signed certificate.</string>
+    <string name="location_denied_switching">Location denied — automatic Wi-Fi URL switching won\'t work</string>
+    <string name="location_switching_title">Location needed for Wi-Fi switching</string>
+    <string name="location_switching_message">Phylax reads your current Wi-Fi network name to switch between the local and remote Frigate URLs automatically. It is used only for that — no GPS, no tracking. Grant location access?</string>
+    <string name="invalid_url">Invalid URL</string>
+    <string name="url_type_external">External</string>
+    <string name="url_type_internal">Internal</string>
+    <string name="url_title_format">%1$s URL</string>
+    <string name="probing_url">Probing %1$s…</string>
+    <string name="not_set">Not set</string>
+    <string name="no_active_server">No active server</string>
+    <string name="connection_mode_auto_summary">Auto mode: URL depends on Wi-Fi network</string>
+    <string name="connection_mode_internal_summary">Always using Internal URL</string>
+    <string name="connection_mode_external_summary">Always using External URL</string>
+    <string name="wifi_ssid_hint">Wi-Fi SSID</string>
+    <string name="no_networks_configured">No networks configured</string>
+    <string name="not_nearby">NOT NEARBY</string>
+    <string name="select_certificate">Select certificate</string>
+    <string name="replace_certificate">Replace certificate</string>
+    <string name="clear_certificate">Clear</string>
+    <string name="certificate_cleared">Certificate cleared</string>
+    <string name="certificate_active">Active: %1$s</string>
+    <string name="wifi_forced_internal">Always using Internal URL\n(Connection mode: Forced Internal)</string>
+    <string name="wifi_forced_external">Always using External URL\n(Connection mode: Forced External)</string>
+    <string name="wifi_disabled_using">Wi-Fi is disabled\nUsing: %1$s</string>
+    <string name="wifi_not_connected_using">Wi-Fi is enabled but not connected\nUsing: %1$s</string>
+    <string name="wifi_connected_details">Connected to: %1$s\nNetwork type: %2$s\nUsing: %3$s</string>
+    <string name="wifi_connected_unknown">Connected to Wi-Fi (SSID unknown)\nUsing: %1$s</string>
+    <string name="wifi_status_error">Error checking network status\nUsing: %1$s</string>
+    <string name="network_type_home">HOME</string>
+    <string name="network_type_external">EXTERNAL</string>
+    <string name="using_internal_url">Internal URL</string>
+    <string name="using_external_url">External URL</string>
+
+    <!-- URL validation -->
+    <string name="url_error_empty">URL can\'t be empty</string>
+    <string name="url_error_invalid">Not a valid URL</string>
+    <string name="url_error_missing_host">URL is missing a host</string>
+    <string name="url_warning_http_external">External URL uses http:// — traffic will be unencrypted</string>
+    <string name="validation_no_server">No server configured</string>
+    <string name="validation_testing">Testing URL connection…</string>
+    <string name="validation_invalid_url">Invalid URL: %1$s</string>
+    <string name="validation_http_failed">Connection failed with status code: %1$d</string>
+    <string name="validation_error">Error: %1$s</string>
+    <string name="validation_success">Connection successful (%1$d) in %2$dms</string>
+    <string name="validation_internal_verified">Internal URL verified</string>
+    <string name="validation_external_verified">External URL verified</string>
+    <string name="validation_timeout">Connection timed out after %1$dms</string>
+    <string name="validation_internal_timeout">Internal URL connection timed out</string>
+    <string name="validation_external_timeout">External URL connection timed out</string>
+    <string name="validation_failed">Connection failed</string>
+
+    <string-array name="connection_mode_entries">
+        <item>Auto (Wi-Fi based)</item>
+        <item>Always use Internal URL</item>
+        <item>Always use External URL</item>
+    </string-array>
+    <string-array name="connection_mode_values" translatable="false">
+        <item>auto</item><item>internal</item><item>external</item>
+    </string-array>
+
+    <!-- Notifications -->
+    <string name="notifications_enable_title">Enable notifications</string>
+    <string name="notifications_enable_summary">Listen for Frigate alerts in the background</string>
+    <string name="notifications_filters_title">Filters</string>
+    <string name="notifications_alerts_title">Alerts</string>
+    <string name="notifications_alerts_summary">Reviews flagged by Frigate as alerts</string>
+    <string name="notifications_detections_title">Detections</string>
+    <string name="notifications_detections_summary">All tracked-object reviews (noisier)</string>
+    <string name="notifications_cameras_title">Cameras</string>
+    <string name="notifications_all_cameras">All cameras</string>
+    <string name="notifications_zones_title">Zones</string>
+    <string name="notifications_all_zones">All zones</string>
+    <string name="notifications_motion_section">Motion (no object)</string>
+    <string name="notifications_motion_cameras">Motion cameras</string>
+    <string name="off">Off</string>
+    <string name="notifications_motion_cooldown">Motion cooldown</string>
+    <string name="notifications_motion_urgent">Urgent motion alerts</string>
+    <string name="notifications_motion_urgent_summary">Pop up on screen with strong vibration, like event alerts</string>
+    <string name="notifications_behavior_title">Behavior</string>
+    <string name="notifications_external_only">Only on external URL</string>
+    <string name="notifications_external_only_summary">Mute notifications when connected to internal network (home Wi-Fi)</string>
+    <string name="notifications_tap_action">Tap action</string>
+    <string name="notifications_tap_action_summary">What happens when you tap a notification</string>
+    <string name="notifications_global_cooldown">Global cooldown</string>
+    <string name="notifications_camera_cooldown">Per-camera cooldown</string>
+    <string name="notifications_sounds_title">Sounds</string>
+    <string name="notifications_alert_sound">Alert sound</string>
+    <string name="notifications_detection_sound">Detection sound</string>
+    <string name="notifications_motion_sound">Motion sound</string>
+    <string name="notifications_sound_summary">Tap to choose ringtone, system sound, or silent</string>
+    <string name="notifications_reliability_title">Reliability</string>
+    <string name="notifications_dnd_title">Override Do Not Disturb</string>
+    <string name="notifications_dnd_summary">Lets alerts ring at alarm volume even while DND is on</string>
+    <string name="notifications_battery_title">Battery optimization</string>
+    <string name="notifications_battery_summary">Required so the listener stays alive in the background</string>
+    <string name="notifications_alarms_title">Alarms and reminders</string>
+    <string name="notifications_alarms_summary">Lets the five-minute check restart the listener</string>
+    <string name="notifications_background_title">Background restrictions</string>
+    <string name="notifications_last_alert">Last alert received</string>
+    <string name="notifications_diagnostics">Service diagnostics</string>
+    <string name="notifications_diagnostics_summary">Tap to see service start / destroy / WS timeline</string>
+    <string name="notifications_permission_denied">Notifications permission denied, so alerts stay off</string>
+    <string name="notifications_dnd_granted">Granted. Alerts ring at alarm volume even while DND is on.</string>
+    <string name="notifications_dnd_grant">Tap to grant Do Not Disturb access so alerts can override DND.</string>
+    <string name="notifications_battery_exempted">Exempted. The listener can run in the background.</string>
+    <string name="notifications_battery_on">Battery optimization is ON, so the listener may be killed. Tap to exempt.</string>
+    <string name="notifications_alarm_granted">Granted. The five-minute check can restart the listener.</string>
+    <string name="notifications_alarm_grant">Tap to allow alarms and reminders so the five-minute check can restart the listener.</string>
+    <string name="notifications_no_cameras">No cameras</string>
+    <string name="notifications_all_cameras_short">All cameras</string>
+    <string name="notifications_no_zones">No zones</string>
+    <string name="notifications_all_zones_short">All zones</string>
+    <string name="notifications_one_camera">1 camera</string>
+    <string name="notifications_camera_count">%1$d cameras</string>
+    <string name="loading_cameras">Loading cameras…</string>
+    <string name="loading_zones">Loading zones…</string>
+    <string name="fetching_frigate_config">Fetching Frigate configuration</string>
+    <string name="set_frigate_url_first">Set the Frigate URL first</string>
+    <string name="couldnt_fetch_cameras">Couldn\'t fetch cameras (check credentials and URL)</string>
+    <string name="select_all">Select all</string>
+    <string name="deselect_all">Deselect all</string>
+    <string name="no_cameras_muted">No cameras — all camera notifications muted</string>
+    <string name="all_cameras_notify">All cameras — every camera triggers notifications</string>
+    <string name="camera_selection_count">%1$d of %2$d cameras selected</string>
+    <string name="unable_load_cameras">Unable to load cameras</string>
+    <string name="motion_notifications_title">Motion notifications</string>
+    <string name="motion_notifications_summary">Pick cameras to get a notification on any motion. Requires object detection enabled on the camera in Frigate.</string>
+    <string name="no_camera_zones">No camera zones found. Configure zones in Frigate\'s config.</string>
+    <string name="no_zones_for_enabled_cameras">No zones to show. Enable more cameras in the Cameras filter.</string>
+    <string name="no_zones_muted">No zones — zone-tagged reviews are muted</string>
+    <string name="all_zones_notify">All zones — every review with a zone match notifies</string>
+    <string name="zone_selection_count">%1$d of %2$d zones selected</string>
+    <string name="unable_load_zones">Unable to load zones</string>
+    <string name="ringtone_picker_failed">Couldn\'t open ringtone picker</string>
+    <string name="sound_alert_default">Phylax Alert (default)</string>
+    <string name="sound_chime_default">Phylax Chime (default)</string>
+    <string name="sound_silent">Silent</string>
+    <string name="sound_custom">Custom sound</string>
+    <string name="diagnostics_never">never</string>
+    <string name="diagnostics_ago">%1$s ago</string>
+    <string name="duration_days_short">%1$d d</string>
+    <string name="duration_hours_short">%1$d h</string>
+    <string name="duration_minutes_short">%1$d min</string>
+    <string name="duration_seconds_short">%1$d s</string>
+    <string name="diag_service_started">Service started</string>
+    <string name="diag_previous_start">Previous start</string>
+    <string name="diag_service_destroyed">Service destroyed</string>
+    <string name="diag_ws_connected">WS connected</string>
+    <string name="diag_ws_disconnected">WS disconnected</string>
+    <string name="diag_last_alert">Last alert delivered</string>
+    <string name="no_alerts_received">No alerts received yet.</string>
+    <string name="last_alert_stale">%1$s ago. If this is unexpected, check the Background restrictions row.</string>
+    <string name="last_alert_age">%1$s ago.</string>
+
+    <string-array name="notify_tap_action_entries">
+        <item>Open the review page</item>
+        <item>Just open the app</item>
+    </string-array>
+    <string-array name="notify_tap_action_values" translatable="false">
+        <item>review</item><item>home</item>
+    </string-array>
+    <string-array name="cooldown_entries">
+        <item>Off</item><item>15 seconds</item><item>30 seconds</item><item>1 minute</item><item>2 minutes</item><item>5 minutes</item><item>10 minutes</item>
+    </string-array>
+    <string-array name="cooldown_values" translatable="false">
+        <item>0</item><item>15</item><item>30</item><item>60</item><item>120</item><item>300</item><item>600</item>
+    </string-array>
+
+    <!-- Notification onboarding / OEM -->
+    <string name="onboarding_reliable_title">Keep notifications reliable</string>
+    <string name="onboarding_battery_auto">Android may silently kill the background listener after a while. Allow Phylax to bypass battery optimization so alerts arrive reliably?</string>
+    <string name="onboarding_battery_manual">Allow Phylax to bypass battery optimization?</string>
+    <string name="onboarding_oem_title">One more step on %1$s</string>
+    <string name="onboarding_dnd_title">Override Do Not Disturb</string>
+    <string name="onboarding_dnd_auto">Phylax can ring alerts at alarm volume even while Do Not Disturb is on, so you don\'t miss a real event overnight. Android opens a list of every app that can ask for this, so find Phylax there and turn it on.</string>
+    <string name="onboarding_dnd_manual">Grant Phylax permission to override Do Not Disturb so alerts ring at alarm volume? Android opens a list of every app that can ask for this, so find Phylax there and turn it on.</string>
+    <string name="dnd_settings_failed">Unable to open DND access settings</string>
+    <string name="oem_generic_name">your device</string>
+    <string name="oem_samsung_instructions">On Samsung, &quot;Unrestricted&quot; battery alone is not enough — Auto-optimize daily still kills background services. Do both: set battery to Unrestricted, and turn off Auto-optimize in Device Care. The button below opens the right screen.</string>
+    <string name="oem_xiaomi_instructions">MIUI requires explicit Autostart permission for background services. Enable it for Phylax in the screen below.</string>
+    <string name="oem_oppo_instructions">OPPO / OnePlus ColorOS keeps a Startup Manager list. Enable Phylax there.</string>
+    <string name="oem_huawei_instructions">Huawei / Honor requires Protected Apps and Startup to be enabled so the listener survives.</string>
+    <string name="oem_vivo_instructions">Vivo / iQOO needs High Background Power Consumption enabled for Phylax.</string>
+    <string name="oem_generic_instructions">Android\'s own battery-optimization exemption should be enough. If notifications still lag, check the manufacturer\'s background-activity settings manually.</string>
+
+    <!-- Notification content/channels -->
+    <string name="motion_detected_title">Motion detected on %1$s</string>
+    <string name="motion_notification_body">Motion • %1$s</string>
+    <string name="detected_at_on">%1$s detected at %2$s on %3$s</string>
+    <string name="detected_on">%1$s detected on %2$s</string>
+    <string name="severity_alert">Alert</string>
+    <string name="severity_detection">Detection</string>
+    <string name="activity_label">Activity</string>
+    <string name="car_label">Car</string>
+    <string name="object_and">%1$s and %2$s</string>
+    <string name="object_with">%1$s with %2$s</string>
+    <string name="channel_alerts_name">Frigate alerts</string>
+    <string name="channel_alerts_desc">High-priority reviews flagged by Frigate as alerts</string>
+    <string name="channel_detections_name">Frigate detections</string>
+    <string name="channel_detections_desc">Tracked-object detections</string>
+    <string name="channel_motion_name">Frigate motion</string>
+    <string name="channel_motion_desc">Per-camera motion detected by Frigate (no object required)</string>
+    <string name="channel_motion_urgent_name">Frigate motion (urgent)</string>
+    <string name="channel_motion_urgent_desc">Per-camera motion, urgent (heads-up + strong vibration)</string>
+    <string name="channel_listener_name">Frigate listener</string>
+    <string name="channel_listener_desc">Persistent background listener for Frigate alerts</string>
+
+    <!-- Mute groups -->
     <string name="mute_groups_title">Mute notifications</string>
     <string name="mute_active_section">Active mutes</string>
     <string name="mute_cameras_section">Cameras</string>
@@ -53,95 +346,147 @@
     <string name="mute_duration_4h">4 hours</string>
     <string name="mute_duration_8h">8 hours</string>
     <string name="mute_loading_groups">Loading…</string>
+
+    <!-- Servers -->
+    <string name="servers_add">Add server</string>
+    <string name="servers_name_hint">Server name</string>
+    <string name="servers_add_message">Give the new server a short name. Configure its URL and credentials from Connection after switching to it.</string>
+    <string name="servers_switched">Switched to %1$s</string>
+    <string name="servers_added">Added %1$s. Open Connection to configure URLs and credentials.</string>
+    <string name="servers_default_name">New server</string>
+    <string name="servers_default_name_numbered">New server %1$d</string>
+    <string name="servers_rename">Rename</string>
+    <string name="servers_delete_title">Delete %1$s?</string>
+    <string name="servers_delete_last_message">This removes your only server and its stored credentials, URLs, and notification filters. The app returns to the setup screen. Cannot be undone.</string>
+    <string name="servers_delete_message">This removes the server and its stored credentials, URLs, and notification filters. Cannot be undone.</string>
+    <string name="servers_not_configured">Not configured</string>
+
+    <!-- Connection status / stats -->
     <string name="connection_status_dialog_title">Connection status</string>
+    <string name="connection_offline">Offline</string>
+    <string name="transport_wifi">Wi-Fi</string>
+    <string name="transport_cellular">Cellular</string>
+    <string name="transport_ethernet">Ethernet</string>
+    <string name="transport_other">Other</string>
+    <string name="server_unreachable">Server unreachable</string>
+    <string name="connected_internal">Connected (internal)</string>
+    <string name="connected_external">Connected (external)</string>
+    <string name="forced_mode">Forced %1$s</string>
+    <string name="roundtrip_avg_last">Roundtrip: avg %1$dms · last %2$dms</string>
+    <string name="roundtrip_last">Roundtrip: last %1$dms</string>
+    <string name="roundtrip_none">Roundtrip: no samples yet</string>
+    <string name="connection_error_badge">ERROR</string>
+    <string name="connection_internal_badge">INT</string>
+    <string name="connection_external_badge">EXT</string>
+    <string name="system_statistics">System statistics</string>
+    <string name="stats_cpu">CPU</string>
+    <string name="stats_gpu">GPU</string>
+    <string name="stats_ram">RAM</string>
+    <string name="stats_uptime_prefix">up</string>
+    <string name="stats_detectors">Detectors</string>
+    <string name="stats_cameras">Cameras</string>
+    <string name="stats_waiting">Waiting for Frigate…</string>
+    <string name="stats_no_detectors">No detectors reported</string>
+    <string name="stats_no_cameras">No cameras reported</string>
+    <string name="stats_detection_fps">det %1$.1f</string>
+    <string name="stats_detection_none">det —</string>
 
-    <string name="menu_home">Phylax</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_settings">Settings</string>
-    
-    <!-- Settings -->
-    <string name="internal_url_title">Internal URL</string>
-    <string name="internal_url_summary">The URL to use when connected to home network</string>
-    <string name="external_url_title">External URL</string>
-    <string name="external_url_summary">The URL to use when connected to external networks</string>
-    <string name="wifi_networks_title">Home WiFi Networks</string>
-    <string name="wifi_networks_summary">Comma-separated list of SSIDs for home networks</string>
-    <string name="network_settings">Network Settings</string>
-    <string name="web_view_settings">WebView Settings</string>
-    <string name="enable_javascript_title">Enable JavaScript</string>
-    <string name="enable_javascript_summary">Allow JavaScript execution in the WebView</string>
-    <string name="enable_dom_storage_title">Enable DOM Storage</string>
-    <string name="enable_dom_storage_summary">Enable DOM storage for the WebView</string>
-    <string name="refresh_on_network_change_title">Refresh on network change</string>
-    <string name="refresh_on_network_change_summary">Automatically refresh when the network changes</string>
-    
-    <!-- Arrays -->
-    <string-array name="empty_array">
-        <!-- Placeholder for dynamically filled arrays -->
-    </string-array>
-    
-    <!-- Connection mode arrays -->
-    <string-array name="connection_mode_entries">
-        <item>Auto (WiFi based)</item>
-        <item>Always use Internal URL</item>
-        <item>Always use External URL</item>
-    </string-array>
-    
-    <string-array name="connection_mode_values">
-        <item>auto</item>
-        <item>internal</item>
-        <item>external</item>
-    </string-array>
-    
-    <!-- Download location arrays -->
+    <!-- Downloads -->
+    <string name="download_location_title">Download Location</string>
+    <string name="download_location_summary">Choose where to save downloaded videos and images</string>
+    <string name="downloading_from_frigate">Downloading from Frigate</string>
+    <string name="downloading_file">Downloading %1$s…</string>
+    <string name="downloaded_file">Downloaded: %1$s</string>
+    <string name="download_failed">Download failed: %1$s</string>
+    <string name="download_unknown_error">Unknown error</string>
+    <string name="download_file_not_found">File not found after download</string>
+    <string name="download_timed_out">Download timed out</string>
+    <string name="download_cannot_resume">Cannot resume download</string>
+    <string name="download_storage_not_found">Storage not found</string>
+    <string name="download_file_exists">File already exists</string>
+    <string name="download_file_error">File error</string>
+    <string name="download_insufficient_space">Insufficient space</string>
+    <string name="download_too_many_redirects">Too many redirects</string>
+    <string name="download_failed_code">Download failed (code: %1$d)</string>
+    <string name="no_app_open_file">No app found to open this file</string>
+    <string name="error_opening_file">Error opening file: %1$s</string>
     <string-array name="download_location_entries">
-        <item>Downloads/Frigate</item>
-        <item>Pictures (Gallery)</item>
-        <item>Movies (Gallery)</item>
-        <item>Downloads (Root)</item>
+        <item>Downloads/Frigate</item><item>Pictures (Gallery)</item><item>Movies (Gallery)</item><item>Downloads (Root)</item>
     </string-array>
-    
-    <string-array name="download_location_values">
-        <item>downloads</item>
-        <item>pictures</item>
-        <item>movies</item>
-        <item>downloads_root</item>
+    <string-array name="download_location_values" translatable="false">
+        <item>downloads</item><item>pictures</item><item>movies</item><item>downloads_root</item>
     </string-array>
 
-    <!-- Notification tap action -->
-    <string-array name="notify_tap_action_entries">
-        <item>Open the review page</item>
-        <item>Just open the app</item>
-    </string-array>
+    <!-- Home / WebView -->
+    <string name="enable_notifications_question">Enable notifications?</string>
+    <string name="enable_notifications_message">Get a notification when this server reports an Alert (higher-confidence events like a person or car). You can fine-tune Alerts vs Detections, cameras and zones later in Settings → Notifications.</string>
+    <string name="alert_notifications_enabled">Alert notifications enabled</string>
+    <string name="notifications_later_hint">You can enable notifications later in Settings</string>
+    <string name="microphone_denied">Microphone denied — two-way talk is unavailable</string>
+    <string name="ssl_not_yet_valid">Certificate not yet valid</string>
+    <string name="ssl_expired">Certificate expired</string>
+    <string name="ssl_id_mismatch">Certificate ID mismatch</string>
+    <string name="ssl_untrusted">Certificate not trusted</string>
+    <string name="ssl_date_invalid">Certificate date invalid</string>
+    <string name="ssl_invalid">Certificate invalid</string>
+    <string name="ssl_unknown">Unknown SSL error</string>
+    <string name="unknown_reason">Unknown reason</string>
+    <string name="webview_no_additional_info">No additional information available</string>
+    <string name="webview_renderer_terminated">WebView renderer process terminated</string>
+    <string name="webview_recovering">Recovering from WebView crash…</string>
+    <string name="certificate_rejected">Certificate rejected — please select a new one</string>
 
-    <string-array name="notify_tap_action_values">
-        <item>review</item>
-        <item>home</item>
-    </string-array>
+    <!-- Advanced -->
+    <string name="voice_audio_mode_title">Voice audio processing</string>
+    <string name="voice_audio_mode_summary">Route Frigate audio through the voice-call path. Many devices then apply hardware noise suppression and echo cancellation, which can make speech clearer.</string>
 
-    <!-- Cooldown presets for notifications -->
-    <string-array name="cooldown_entries">
-        <item>Off</item>
-        <item>15 seconds</item>
-        <item>30 seconds</item>
-        <item>1 minute</item>
-        <item>2 minutes</item>
-        <item>5 minutes</item>
-        <item>10 minutes</item>
-    </string-array>
-
-    <string-array name="cooldown_values">
-        <item>0</item>
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>120</item>
-        <item>300</item>
-        <item>600</item>
-    </string-array>
+    <!-- About / updates -->
+    <string name="about_check_updates">Check for updates</string>
+    <string name="about_check_updates_summary">Look for a newer Phylax release on GitHub</string>
+    <string name="about_whats_new">What\'s new</string>
+    <string name="about_whats_new_summary">Latest release notes on GitHub</string>
+    <string name="about_source">Source code</string>
+    <string name="about_issues">Report an issue</string>
+    <string name="about_share_logs">Share debug logs</string>
+    <string name="about_share_logs_summary">Bundle the last day of logs to attach to a report</string>
+    <string name="about_third_party">Third-party notices</string>
+    <string name="about_third_party_summary">Open-source libraries and CC0 assets</string>
+    <string name="about_collecting_logs">Collecting logs…</string>
+    <string name="about_no_logs">No logs to share. Android did not let the app read its own logcat.</string>
+    <string name="about_share_failed">Share failed: %1$s</string>
+    <string name="about_share_chooser">Share debug logs</string>
+    <string name="about_open_with">Open with</string>
+    <string name="update_checking">Checking for updates…</string>
+    <string name="update_check_failed">Could not check for updates: %1$s</string>
+    <string name="update_latest">You\'re on the latest version</string>
+    <string name="update_available_title">Update Available</string>
+    <string name="update_available_body">Version %1$s is available! (%2$dMB)\n\nWhat\'s New:\n%3$s</string>
+    <string name="update_download">Download</string>
+    <string name="update_downloading">Downloading update…</string>
+    <string name="update_downloading_progress">Downloading update… %1$d%%</string>
+    <string name="update_downloading_title">Downloading Update</string>
+    <string name="update_download_failed_title">Download Failed</string>
+    <string name="update_download_failed_message">Unable to download the update. Please try again later or download manually from GitHub.</string>
+    <string name="update_verification_failed_title">Update verification failed</string>
+    <string name="update_verification_failed_message">The downloaded update wasn\'t signed by the same developer as this app. Installation has been cancelled for your safety.\n\nPlease download the update manually from GitHub.</string>
+    <string name="update_install_failed_title">Installation Failed</string>
+    <string name="update_install_failed_message">Unable to install the update: %1$s\n\nPlease download manually from GitHub.</string>
 
     <!-- Picture-in-Picture -->
     <string name="pip_unsupported">Picture-in-Picture is not supported on this device</string>
     <string name="pip_unavailable">Enable Picture-in-Picture for Phylax in system settings</string>
+
+    <!-- Accessibility / branding -->
+    <string name="buy_me_a_coffee">Buy me a coffee</string>
+    <string name="brand_name_upper">PHYLAX</string>
+
+    <!-- Dynamic statistics formatting -->
+    <string name="stats_memory_format">RAM %1$s</string>
+    <string name="stats_uptime_format">up %1$s</string>
+    <string name="stats_camera_fps">%1$.1f fps</string>
+    <string name="stats_camera_fps_none">— fps</string>
+    <string name="stats_uptime_days_hours">%1$d d %2$d h</string>
+    <string name="stats_uptime_hours_minutes">%1$d h %2$d min</string>
+    <string name="stats_uptime_minutes">%1$d min</string>
+    <string name="mute_group_label">%1$s (group)</string>
 </resources>

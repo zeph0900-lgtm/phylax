@@ -67,7 +67,7 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
         } else {
             Toast.makeText(
                 requireContext(),
-                "Location denied - automatic Wi-Fi URL switching won't work",
+                getString(R.string.location_denied_switching),
                 Toast.LENGTH_LONG,
             ).show()
         }
@@ -80,16 +80,12 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
         ) == PackageManager.PERMISSION_GRANTED
         if (granted) return
         com.asksakis.freegate.ui.FreegateDialogs.builder(requireContext())
-            .setTitle("Location needed for Wi-Fi switching")
-            .setMessage(
-                "Phylax reads your current Wi-Fi network name to switch between the local " +
-                    "and remote Frigate URLs automatically. It is used only for that - no GPS, " +
-                    "no tracking. Grant location access?"
-            )
-            .setPositiveButton("Continue") { _, _ ->
+            .setTitle(R.string.location_switching_title)
+            .setMessage(R.string.location_switching_message)
+            .setPositiveButton(R.string.action_continue) { _, _ ->
                 locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
-            .setNegativeButton("Not now", null)
+            .setNegativeButton(R.string.action_not_now, null)
             .show()
     }
 
@@ -196,8 +192,8 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
                 }
                 CredentialsStore.PREF_USERNAME -> {
                     showAccountFieldDialog(
-                        title = "Username",
-                        hint = "Frigate UI username",
+                        title = getString(R.string.username_title),
+                        hint = getString(R.string.username_summary),
                         autofillHints = arrayOf(View.AUTOFILL_HINT_USERNAME),
                         isPassword = false,
                         getter = {
@@ -213,8 +209,8 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
                 }
                 CredentialsStore.PREF_PASSWORD -> {
                     showAccountFieldDialog(
-                        title = "Password",
-                        hint = "Frigate UI password",
+                        title = getString(R.string.password_title),
+                        hint = getString(R.string.password_summary),
                         autofillHints = arrayOf(View.AUTOFILL_HINT_PASSWORD),
                         isPassword = true,
                         getter = {
@@ -284,10 +280,10 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
         val dialog = com.asksakis.freegate.ui.FreegateDialogs.builder(ctx)
             .setTitle(title)
             .setView(view)
-            .setPositiveButton("Save") { _, _ ->
+            .setPositiveButton(R.string.action_save) { _, _ ->
                 setter(edit.text?.toString().orEmpty())
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.action_cancel, null)
             .create()
         dialog.setOnShowListener { edit.requestFocus() }
         dialog.show()
@@ -295,7 +291,7 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
 
     private fun showUrlEditDialog(pref: EditTextPreference) {
         val external = pref.key == "external_url"
-        val urlType = if (external) "External" else "Internal"
+        val urlType = getString(if (external) R.string.url_type_external else R.string.url_type_internal)
         val placeholder = if (external) "e.g. https://frigate.example.com" else "e.g. http://frigate.local:5000"
         val ctx = requireContext()
 
@@ -308,7 +304,7 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
         )
         val statusTv = view.findViewById<android.widget.TextView>(R.id.url_field_probe_status)
 
-        til.hint = "$urlType URL"
+        til.hint = getString(R.string.url_title_format, urlType)
         til.placeholderText = placeholder
         input.imeOptions = EditorInfo.IME_FLAG_NO_FULLSCREEN or EditorInfo.IME_FLAG_NO_EXTRACT_UI
         input.setText(pref.text.orEmpty())
@@ -324,11 +320,11 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
         })
 
         val dialog = com.asksakis.freegate.ui.FreegateDialogs.builder(ctx)
-            .setTitle("$urlType URL")
+            .setTitle(getString(R.string.url_title_format, urlType))
             .setView(view)
-            .setPositiveButton("Save", null) // handled in OnShowListener so we can block dismiss
-            .setNeutralButton("Test", null)  // same — we probe without dismissing
-            .setNegativeButton("Cancel", null)
+            .setPositiveButton(R.string.action_save, null) // handled in OnShowListener so we can block dismiss
+            .setNeutralButton(R.string.action_test, null)  // same — we probe without dismissing
+            .setNegativeButton(R.string.action_cancel, null)
             .create()
 
         fun showProbeStatus(text: String) {
@@ -432,7 +428,7 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
         // Custom layout puts the static "Server" label in `@android:id/title`
         // and the profile name in `@android:id/summary` (mapped via the
         // preference binding) — gives a small label + larger name treatment.
-        pref.summary = store.getActive()?.name ?: "No active server"
+        pref.summary = store.getActive()?.name ?: getString(R.string.no_active_server)
     }
 
     private fun setupConnectionModePreference() {
@@ -441,9 +437,9 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
 
         connModePref.setOnPreferenceChangeListener { _, newValue ->
             val toast = when (newValue.toString()) {
-                "auto" -> "Auto mode: URL depends on WiFi network"
-                "internal" -> "Always using Internal URL"
-                "external" -> "Always using External URL"
+                "auto" -> getString(R.string.connection_mode_auto_summary)
+                "internal" -> getString(R.string.connection_mode_internal_summary)
+                "external" -> getString(R.string.connection_mode_external_summary)
                 else -> null
             }
             toast?.let { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
@@ -490,7 +486,7 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
             val input = EditText(requireContext()).apply {
                 inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 imeOptions = EditorInfo.IME_FLAG_NO_FULLSCREEN or EditorInfo.IME_FLAG_NO_EXTRACT_UI
-                hint = "WiFi SSID"
+                hint = getString(R.string.wifi_ssid_hint)
                 getActiveWifiSsid()
                     ?.takeUnless { it in setOf("Current WiFi", "Unknown WiFi", "<unknown ssid>") }
                     ?.let { setText(it); selectAll() }
@@ -500,9 +496,9 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
                 addView(input)
             }
             com.asksakis.freegate.ui.FreegateDialogs.builder(requireContext())
-                .setTitle("Add home network")
+                .setTitle(R.string.add_home_network_title)
                 .setView(container)
-                .setPositiveButton("Add") { _, _ ->
+                .setPositiveButton(R.string.action_add) { _, _ ->
                     val ssid = input.text.toString().trim().removeSurrounding("\"")
                     if (ssid.isEmpty()) return@setPositiveButton
                     val updated = getHomeNetworks().toMutableSet().apply { add(ssid) }
@@ -510,7 +506,7 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
                     populateHomeWifiEntries()
                     updateWifiStatus()
                 }
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
             true
         }
@@ -628,7 +624,7 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
                 arrayOf("Replace certificate", "Clear")
             }
             com.asksakis.freegate.ui.FreegateDialogs.builder(requireContext())
-                .setTitle("Client certificate")
+                .setTitle(R.string.client_certificate_title)
                 .setItems(options) { _, which ->
                     when (options[which]) {
                         "Select certificate", "Replace certificate" -> {
@@ -641,7 +637,11 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
                         }
                         "Clear" -> {
                             certManager.clearAlias()
-                            Toast.makeText(requireContext(), "Certificate cleared", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.certificate_cleared),
+                                Toast.LENGTH_SHORT,
+                            ).show()
                             refreshClientCertSummary()
                         }
                     }
@@ -753,7 +753,7 @@ class ConnectionSettingsFragment : PreferenceFragmentCompat() {
             }
         } catch (e: Exception) {
             val fallback = if (networkUtils.isHome()) "Internal URL" else "External URL"
-            wifiStatusPref.summary = "Error checking network status\nUsing: $fallback"
+            wifiStatusPref.summary = getString(R.string.wifi_status_error, fallback)
             Log.e(TAG, "Error updating WiFi status: ${e.message}")
         }
     }

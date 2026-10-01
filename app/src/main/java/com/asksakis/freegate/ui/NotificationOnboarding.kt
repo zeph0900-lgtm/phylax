@@ -1,5 +1,6 @@
 package com.asksakis.freegate.ui
 
+import com.asksakis.freegate.R
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
@@ -121,16 +122,14 @@ class NotificationOnboarding(
             return false
         }
         FreegateDialogs.builder(ctx)
-            .setTitle("Keep notifications reliable")
+            .setTitle(R.string.onboarding_reliable_title)
             .setMessage(
                 if (autoPrompt)
-                    "Android may silently kill the background listener after a while. " +
-                        "Allow Phylax to bypass battery optimization so alerts arrive " +
-                        "reliably?"
+                    ctx.getString(R.string.onboarding_battery_auto)
                 else
-                    "Allow Phylax to bypass battery optimization?"
+                    ctx.getString(R.string.onboarding_battery_manual)
             )
-            .setPositiveButton("Allow") { _, _ ->
+            .setPositiveButton(R.string.action_allow) { _, _ ->
                 if (onDismiss != null) waitingForSystemScreen = true
                 markPrompted(PREF_BATTERY_PROMPTED)
                 BatteryOptHelper.requestIgnore(ctx)
@@ -138,7 +137,7 @@ class NotificationOnboarding(
                     promptOemBackgroundRestrictions()
                 }
             }
-            .setNegativeButton("Not now") { _, _ -> markPrompted(PREF_BATTERY_PROMPTED) }
+            .setNegativeButton(R.string.action_not_now) { _, _ -> markPrompted(PREF_BATTERY_PROMPTED) }
             .apply { onDismiss?.let { resume -> setOnDismissListener { resume() } } }
             .show()
         return true
@@ -153,13 +152,13 @@ class NotificationOnboarding(
         markPrompted(PREF_OEM_PROMPTED)
         val oem = OemSettingsIntents.current()
         FreegateDialogs.builder(ctx)
-            .setTitle("One more step on ${oem.displayName}")
-            .setMessage(OemSettingsIntents.instructionsFor(oem))
-            .setPositiveButton("Open settings") { _, _ ->
+            .setTitle(ctx.getString(R.string.onboarding_oem_title, oem.displayName))
+            .setMessage(OemSettingsIntents.instructionsFor(ctx, oem))
+            .setPositiveButton(R.string.action_open_settings) { _, _ ->
                 if (onDismiss != null) waitingForSystemScreen = true
                 OemSettingsIntents.openBackgroundRestrictions(ctx)
             }
-            .setNegativeButton("Later", null)
+            .setNegativeButton(R.string.action_later, null)
             .apply { onDismiss?.let { resume -> setOnDismissListener { resume() } } }
             .show()
         return true
@@ -180,24 +179,19 @@ class NotificationOnboarding(
         if (autoPrompt && prefs?.getBoolean(PREF_DND_PROMPTED, false) == true) return false
 
         FreegateDialogs.builder(ctx)
-            .setTitle("Override Do Not Disturb")
+            .setTitle(R.string.onboarding_dnd_title)
             .setMessage(
                 if (autoPrompt)
-                    "Phylax can ring alerts at alarm volume even while Do Not " +
-                        "Disturb is on, so you don't miss a real event overnight. " +
-                        "Android opens a list of every app that can ask for this, so find " +
-                        "Phylax there and turn it on."
+                    ctx.getString(R.string.onboarding_dnd_auto)
                 else
-                    "Grant Phylax permission to override Do Not Disturb so alerts " +
-                        "ring at alarm volume? Android opens a list of every app that " +
-                        "can ask for this, so find Phylax there and turn it on."
+                    ctx.getString(R.string.onboarding_dnd_manual)
             )
             .setPositiveButton("Open settings") { _, _ ->
                 markPrompted(PREF_DND_PROMPTED)
                 if (onDismiss != null) waitingForSystemScreen = true
                 openDndAccessSettings()
             }
-            .setNegativeButton("Not now") { _, _ -> markPrompted(PREF_DND_PROMPTED) }
+            .setNegativeButton(R.string.action_not_now) { _, _ -> markPrompted(PREF_DND_PROMPTED) }
             .apply { onDismiss?.let { resume -> setOnDismissListener { resume() } } }
             .show()
         return true
@@ -223,7 +217,7 @@ class NotificationOnboarding(
         }
         runCatching { fragment.startActivity(intent) }
             .onFailure {
-                Toast.makeText(ctx, "Unable to open DND access settings", Toast.LENGTH_SHORT)
+                Toast.makeText(ctx, ctx.getString(R.string.dnd_settings_failed), Toast.LENGTH_SHORT)
                     .show()
             }
     }
