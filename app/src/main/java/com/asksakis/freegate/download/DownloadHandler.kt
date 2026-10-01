@@ -1,5 +1,6 @@
 package com.asksakis.freegate.download
 
+import com.asksakis.freegate.R
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -343,11 +344,19 @@ class DownloadHandler(
                 if (intent.resolveActivity(context.packageManager) != null) {
                     context.startActivity(intent)
                 } else {
-                    Toast.makeText(context, "No app found to open this file", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.no_app_open_file),
+                        Toast.LENGTH_SHORT,
+                    ).show()
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error opening file: ${e.message}")
-                Toast.makeText(context, "Error opening file: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.error_opening_file, e.message ?: ""),
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
         }
     }

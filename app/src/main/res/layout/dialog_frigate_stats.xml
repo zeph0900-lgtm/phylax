@@ -34,7 +34,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CPU"
+                    android:text="@string/stats_cpu"
                     android:textColor="@color/text_secondary"
                     android:textSize="11sp"
                     android:letterSpacing="0.12" />
@@ -75,7 +75,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="GPU"
+                    android:text="@string/stats_gpu"
                     android:textColor="@color/text_secondary"
                     android:textSize="11sp"
                     android:letterSpacing="0.12" />
@@ -154,7 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:layout_marginBottom="6dp"
-            android:text="Detectors"
+            android:text="@string/stats_detectors"
             android:textColor="@color/text_secondary"
             android:textSize="11sp"
             android:letterSpacing="0.12" />
@@ -172,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:layout_marginBottom="6dp"
-            android:text="Cameras"
+            android:text="@string/stats_cameras"
             android:textColor="@color/text_secondary"
             android:textSize="11sp"
             android:letterSpacing="0.12" />
@@ -190,7 +190,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="Waiting for Frigate..."
+            android:text="@string/stats_waiting"
             android:textColor="@color/text_secondary"
             android:textSize="13sp"
             android:visibility="gone" />

@@ -7,34 +7,45 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory android:title="@string/settings_general">
+        <ListPreference
+            android:key="app_language"
+            android:title="@string/app_language_title"
+            android:summary="@string/app_language_summary"
+            android:entries="@array/app_language_entries"
+            android:entryValues="@array/app_language_values"
+            android:defaultValue="system"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
     <Preference
         android:key="cat_connection"
         android:icon="@drawable/ic_settings_connection"
-        android:title="Connection"
-        android:summary="URLs, network mode, account, mTLS" />
+        android:title="@string/settings_connection_title"
+        android:summary="@string/settings_connection_summary" />
 
     <Preference
         android:key="cat_notifications"
         android:icon="@drawable/ic_settings_notifications"
-        android:title="Notifications"
-        android:summary="Alerts, cameras, background listener" />
+        android:title="@string/settings_notifications_title"
+        android:summary="@string/settings_notifications_summary" />
 
     <Preference
         android:key="cat_downloads"
         android:icon="@drawable/ic_settings_downloads"
-        android:title="Downloads"
-        android:summary="Where videos and images are saved" />
+        android:title="@string/settings_downloads_title"
+        android:summary="@string/settings_downloads_summary" />
 
     <Preference
         android:key="cat_advanced"
         android:icon="@drawable/ic_settings_advanced"
-        android:title="Advanced"
-        android:summary="User agent, version, updates" />
+        android:title="@string/settings_advanced_title"
+        android:summary="@string/settings_advanced_summary" />
 
     <Preference
         android:key="cat_about"
         android:icon="@drawable/ic_settings_about"
-        android:title="About"
-        android:summary="Source code, license, support the project" />
+        android:title="@string/settings_about_title"
+        android:summary="@string/settings_about_summary" />
 
 </PreferenceScreen>

@@ -1,5 +1,6 @@
 package com.asksakis.freegate.ui.settings
 
+import com.asksakis.freegate.R
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
@@ -30,8 +31,8 @@ class NotificationCamerasFragment : PreferenceFragmentCompat() {
         preferenceScreen = preferenceManager.createPreferenceScreen(requireContext())
 
         val placeholder = Preference(requireContext()).apply {
-            title = "Loading cameras..."
-            summary = "Fetching Frigate configuration"
+            title = getString(R.string.loading_cameras)
+            summary = getString(R.string.fetching_frigate_config)
             isSelectable = false
         }
         preferenceScreen.addPreference(placeholder)
@@ -42,7 +43,7 @@ class NotificationCamerasFragment : PreferenceFragmentCompat() {
     private fun loadCameras() {
         val baseUrl = networkUtils.getUrl().trimEnd('/').takeIf { it.isNotBlank() }
         if (baseUrl == null) {
-            showError("Set the Frigate URL first")
+            showError(getString(R.string.set_frigate_url_first))
             return
         }
 
@@ -50,7 +51,7 @@ class NotificationCamerasFragment : PreferenceFragmentCompat() {
             val cameras = FrigateConfigFetcher(requireContext())
                 .fetchCameraNames(baseUrl)
             if (cameras.isEmpty()) {
-                showError("Couldn't fetch cameras (check credentials and URL)")
+                showError(getString(R.string.couldnt_fetch_cameras))
                 return@launch
             }
             renderScreen(cameras)
@@ -122,11 +123,11 @@ class NotificationCamerasFragment : PreferenceFragmentCompat() {
     private fun Preference.applySelectAllSummary(selected: Set<String>, allCameras: List<String>) {
         val isAll = allCameras.isNotEmpty() && selected.size >= allCameras.size
         val isEmpty = selected.isEmpty()
-        title = if (isAll) "Deselect all" else "Select all"
+        title = getString(if (isAll) R.string.deselect_all else R.string.select_all)
         summary = when {
-            isEmpty -> "No cameras — all camera notifications muted"
-            isAll -> "All cameras — every camera triggers notifications"
-            else -> "${selected.size} of ${allCameras.size} cameras selected"
+            isEmpty -> getString(R.string.no_cameras_muted)
+            isAll -> getString(R.string.all_cameras_notify)
+            else -> getString(R.string.camera_selection_count, selected.size, allCameras.size)
         }
     }
 
@@ -135,7 +136,7 @@ class NotificationCamerasFragment : PreferenceFragmentCompat() {
         Toast.makeText(ctx, message, Toast.LENGTH_LONG).show()
         val screen = preferenceManager.createPreferenceScreen(ctx)
         val msg = Preference(ctx).apply {
-            title = "Unable to load cameras"
+            title = getString(R.string.unable_load_cameras)
             summary = message
             isSelectable = false
         }

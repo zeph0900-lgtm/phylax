@@ -69,7 +69,7 @@
     <fragment
         android:id="@+id/nav_settings_connection"
         android:name="com.asksakis.freegate.ui.settings.ConnectionSettingsFragment"
-        android:label="Connection">
+        android:label="@string/settings_connection_title">
         <action
             android:id="@+id/action_connection_to_servers"
             app:destination="@id/nav_settings_servers"
@@ -82,7 +82,7 @@
     <fragment
         android:id="@+id/nav_settings_notifications"
         android:name="com.asksakis.freegate.ui.settings.NotificationsSettingsFragment"
-        android:label="Notifications">
+        android:label="@string/settings_notifications_title">
         <action
             android:id="@+id/action_notifications_to_cameras"
             app:destination="@id/nav_settings_notification_cameras"
@@ -109,35 +109,35 @@
     <fragment
         android:id="@+id/nav_settings_notification_cameras"
         android:name="com.asksakis.freegate.ui.settings.NotificationCamerasFragment"
-        android:label="Cameras" />
+        android:label="@string/notifications_cameras_title" />
 
     <fragment
         android:id="@+id/nav_settings_notification_zones"
         android:name="com.asksakis.freegate.ui.settings.NotificationZonesFragment"
-        android:label="Zones" />
+        android:label="@string/notifications_zones_title" />
 
     <fragment
         android:id="@+id/nav_settings_notification_motion_cameras"
         android:name="com.asksakis.freegate.ui.settings.NotificationMotionCamerasFragment"
-        android:label="Motion cameras" />
+        android:label="@string/notifications_motion_cameras" />
 
     <fragment
         android:id="@+id/nav_settings_downloads"
         android:name="com.asksakis.freegate.ui.settings.DownloadsSettingsFragment"
-        android:label="Downloads" />
+        android:label="@string/settings_downloads_title" />
 
     <fragment
         android:id="@+id/nav_settings_advanced"
         android:name="com.asksakis.freegate.ui.settings.AdvancedSettingsFragment"
-        android:label="Advanced" />
+        android:label="@string/settings_advanced_title" />
 
     <fragment
         android:id="@+id/nav_settings_servers"
         android:name="com.asksakis.freegate.ui.settings.ServersFragment"
-        android:label="Servers" />
+        android:label="@string/settings_servers_title" />
 
     <fragment
         android:id="@+id/nav_settings_about"
         android:name="com.asksakis.freegate.ui.settings.AboutSettingsFragment"
-        android:label="About" />
+        android:label="@string/settings_about_title" />
 </navigation>

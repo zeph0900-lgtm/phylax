@@ -88,7 +88,7 @@
                     android:includeFontPadding="false"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:text="INT"
+                    android:text="@string/connection_internal_badge"
                     android:textColor="#FFFFFF"
                     android:textSize="11sp"
                     android:textStyle="bold" />

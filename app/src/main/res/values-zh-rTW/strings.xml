@@ -1,0 +1,466 @@
+<resources>
+    <string name="app_name">Phylax TW</string>
+    <string name="navigation_drawer_open">開啟導覽選單</string>
+    <string name="navigation_drawer_close">關閉導覽選單</string>
+    <string name="nav_header_title">Phylax TW</string>
+    <string name="nav_header_subtitle">Frigate NVR 檢視器</string>
+    <string name="nav_header_desc">導覽標頭</string>
+    <string name="action_settings">設定</string>
+    <string name="action_refresh">重新整理</string>
+    <string name="action_close">關閉</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_save">儲存</string>
+    <string name="action_add">新增</string>
+    <string name="action_delete">刪除</string>
+    <string name="action_rename">重新命名</string>
+    <string name="action_continue">繼續</string>
+    <string name="action_skip">略過</string>
+    <string name="action_not_now">稍後再說</string>
+    <string name="action_later">稍後</string>
+    <string name="action_allow">允許</string>
+    <string name="action_enable">啟用</string>
+    <string name="action_open">開啟</string>
+    <string name="action_open_settings">開啟設定</string>
+    <string name="action_test">測試</string>
+    <string name="action_ok">確定</string>
+    <string name="more_options">更多選項</string>
+
+    <string name="settings_general">一般</string>
+    <string name="app_language_title">語言</string>
+    <string name="app_language_summary">選擇 Phylax TW 使用的介面語言</string>
+    <string-array name="app_language_entries">
+        <item>跟隨系統</item><item>繁體中文（台灣）</item><item>English</item>
+    </string-array>
+    <string-array name="app_language_values" translatable="false">
+        <item>system</item><item>zh-TW</item><item>en</item>
+    </string-array>
+
+    <string name="connecting_title">正在連線</string>
+    <string name="connecting_error_title">無法連線至伺服器</string>
+    <string name="connecting_error_no_url">此設定檔尚未設定網址。請開啟「設定 → 連線」新增網址。</string>
+    <string name="connecting_retry">重試</string>
+    <string name="connecting_error_refused">伺服器沒有回應。</string>
+    <string name="connecting_error_unreachable">無法連上網路。</string>
+    <string name="connecting_error_dns">找不到此主機。</string>
+    <string name="connecting_error_timeout">連線逾時。</string>
+    <string name="connecting_error_ssl">安全連線失敗。</string>
+    <string name="connecting_error_generic">無法連線至伺服器。</string>
+    <string name="connection_failed">連線失敗</string>
+    <string name="connection_failed_error">連線失敗：%1$s</string>
+    <string name="dns_error">DNS 錯誤 — 無法解析主機名稱</string>
+    <string name="access_denied_403">拒絕存取（403）</string>
+    <string name="connection_timeout">連線逾時</string>
+
+    <string name="setup_empty_title">連線至你的 Frigate 伺服器</string>
+    <string name="setup_empty_subtitle">Phylax 需要你的 Frigate NVR 位址才能開始使用。新增伺服器後即可連線。</string>
+    <string name="setup_empty_add_server">新增伺服器</string>
+    <string name="setup_empty_docs">設定說明</string>
+    <string name="setup_title">新增 Frigate 伺服器</string>
+    <string name="setup_url_hint">Frigate 網址</string>
+    <string name="setup_url_helper">例如 http://frigate.local:5000 或 https://frigate.example.com</string>
+    <string name="setup_name_hint">名稱（選填）</string>
+    <string name="setup_username_hint">使用者名稱</string>
+    <string name="setup_password_hint">密碼</string>
+    <string name="setup_advanced">進階</string>
+    <string name="setup_internal_url_hint">區域網路（LAN）網址（選填）</string>
+    <string name="setup_internal_url_helper">連上家中 Wi-Fi 時會自動使用此網址。</string>
+    <string name="setup_test">測試連線</string>
+    <string name="setup_save">儲存並連線</string>
+    <string name="setup_testing">正在測試連線…</string>
+    <string name="setup_test_ok">連線成功</string>
+    <string name="setup_docs_url" translatable="false">https://github.com/sfortis/phylax#readme</string>
+    <string name="setup_valid_url_required">請輸入有效的網址</string>
+    <string name="setup_location_title">自動切換需要位置權限</string>
+    <string name="setup_location_message">你已設定另一個區域網路網址。Phylax 會讀取目前的 Wi-Fi 網路名稱，自動在區域網路與遠端網址之間切換。此資訊僅用於網址切換，不會使用 GPS，也不會追蹤位置。要授予位置權限嗎？</string>
+
+    <string name="menu_home">Phylax</string>
+    <string name="menu_gallery">圖庫</string>
+    <string name="menu_slideshow">投影片播放</string>
+    <string name="menu_settings">設定</string>
+    <string name="settings_connection_title">連線</string>
+    <string name="settings_connection_summary">網址、網路模式、帳號與 mTLS</string>
+    <string name="settings_notifications_title">通知</string>
+    <string name="settings_notifications_summary">警報、攝影機與背景監聽</string>
+    <string name="settings_downloads_title">下載</string>
+    <string name="settings_downloads_summary">設定影片與圖片的儲存位置</string>
+    <string name="settings_advanced_title">進階</string>
+    <string name="settings_advanced_summary">音訊處理與進階選項</string>
+    <string name="settings_about_title">關於</string>
+    <string name="settings_about_summary">原始碼、授權與專案支援</string>
+    <string name="settings_servers_title">伺服器</string>
+
+    <string name="server_title">伺服器</string>
+    <string name="urls_title">網址</string>
+    <string name="internal_url_title">內部網址</string>
+    <string name="internal_url_summary">連上家用網路時使用的網址</string>
+    <string name="external_url_title">外部網址</string>
+    <string name="external_url_summary">不在家用網路時使用的網址</string>
+    <string name="network_mode_title">網路模式</string>
+    <string name="connection_mode_title">連線模式</string>
+    <string name="connection_mode_summary">選擇要使用哪個網址</string>
+    <string name="current_status_title">目前狀態</string>
+    <string name="checking_network_status">正在檢查網路狀態…</string>
+    <string name="wifi_networks_title">家用 Wi-Fi 網路</string>
+    <string name="wifi_networks_summary">視為家用網路的 Wi-Fi</string>
+    <string name="wifi_networks_dialog">選擇家用網路</string>
+    <string name="add_home_network_title">新增家用網路</string>
+    <string name="add_home_network_summary">手動輸入 Wi-Fi SSID</string>
+    <string name="frigate_account_title">Frigate 帳號</string>
+    <string name="username_title">使用者名稱</string>
+    <string name="username_summary">Frigate UI 使用者名稱</string>
+    <string name="password_title">密碼</string>
+    <string name="password_summary">Frigate UI 密碼（加密儲存）</string>
+    <string name="client_certificate_title">用戶端憑證（mTLS）</string>
+    <string name="not_selected">未選擇</string>
+    <string name="strict_tls_title">外部網址強制使用嚴格 TLS</string>
+    <string name="strict_tls_summary">公開網址必須使用受信任的憑證。若 Frigate 使用自簽憑證，請關閉此選項。</string>
+    <string name="location_denied_switching">未授予位置權限 — Wi-Fi 網址自動切換將無法運作</string>
+    <string name="location_switching_title">Wi-Fi 切換需要位置權限</string>
+    <string name="location_switching_message">Phylax 會讀取目前的 Wi-Fi 網路名稱，自動在區域網路與遠端 Frigate 網址之間切換。此資訊僅用於網址切換，不會使用 GPS，也不會追蹤位置。要授予位置權限嗎？</string>
+    <string name="invalid_url">無效的網址</string>
+    <string name="url_type_external">外部</string>
+    <string name="url_type_internal">內部</string>
+    <string name="url_title_format">%1$s網址</string>
+    <string name="probing_url">正在測試 %1$s…</string>
+    <string name="not_set">未設定</string>
+    <string name="no_active_server">沒有作用中的伺服器</string>
+    <string name="connection_mode_auto_summary">自動模式：依 Wi-Fi 網路選擇網址</string>
+    <string name="connection_mode_internal_summary">一律使用內部網址</string>
+    <string name="connection_mode_external_summary">一律使用外部網址</string>
+    <string name="wifi_ssid_hint">Wi-Fi SSID</string>
+    <string name="no_networks_configured">尚未設定網路</string>
+    <string name="not_nearby">不在附近</string>
+    <string name="select_certificate">選擇憑證</string>
+    <string name="replace_certificate">更換憑證</string>
+    <string name="clear_certificate">清除</string>
+    <string name="certificate_cleared">已清除憑證</string>
+    <string name="certificate_active">使用中：%1$s</string>
+    <string name="wifi_forced_internal">一律使用內部網址\n（連線模式：強制內部）</string>
+    <string name="wifi_forced_external">一律使用外部網址\n（連線模式：強制外部）</string>
+    <string name="wifi_disabled_using">Wi-Fi 已關閉\n使用：%1$s</string>
+    <string name="wifi_not_connected_using">Wi-Fi 已開啟但未連線\n使用：%1$s</string>
+    <string name="wifi_connected_details">已連線至：%1$s\n網路類型：%2$s\n使用：%3$s</string>
+    <string name="wifi_connected_unknown">已連上 Wi-Fi（SSID 不明）\n使用：%1$s</string>
+    <string name="wifi_status_error">檢查網路狀態時發生錯誤\n使用：%1$s</string>
+    <string name="network_type_home">家用</string>
+    <string name="network_type_external">外部</string>
+    <string name="using_internal_url">內部網址</string>
+    <string name="using_external_url">外部網址</string>
+
+    <string name="url_error_empty">網址不能留空</string>
+    <string name="url_error_invalid">不是有效的網址</string>
+    <string name="url_error_missing_host">網址缺少主機名稱</string>
+    <string name="url_warning_http_external">外部網址使用 http:// — 傳輸內容不會加密</string>
+    <string name="validation_no_server">尚未設定伺服器</string>
+    <string name="validation_testing">正在測試網址連線…</string>
+    <string name="validation_invalid_url">無效的網址：%1$s</string>
+    <string name="validation_http_failed">連線失敗，狀態碼：%1$d</string>
+    <string name="validation_error">錯誤：%1$s</string>
+    <string name="validation_success">連線成功（%1$d），耗時 %2$dms</string>
+    <string name="validation_internal_verified">內部網址驗證成功</string>
+    <string name="validation_external_verified">外部網址驗證成功</string>
+    <string name="validation_timeout">連線在 %1$dms 後逾時</string>
+    <string name="validation_internal_timeout">內部網址連線逾時</string>
+    <string name="validation_external_timeout">外部網址連線逾時</string>
+    <string name="validation_failed">連線失敗</string>
+
+    <string-array name="connection_mode_entries">
+        <item>自動（依 Wi-Fi 判斷）</item><item>一律使用內部網址</item><item>一律使用外部網址</item>
+    </string-array>
+    <string-array name="connection_mode_values" translatable="false">
+        <item>auto</item><item>internal</item><item>external</item>
+    </string-array>
+
+    <string name="notifications_enable_title">啟用通知</string>
+    <string name="notifications_enable_summary">在背景接收 Frigate 警報</string>
+    <string name="notifications_filters_title">篩選條件</string>
+    <string name="notifications_alerts_title">警報</string>
+    <string name="notifications_alerts_summary">Frigate 標記為警報的檢閱事件</string>
+    <string name="notifications_detections_title">偵測</string>
+    <string name="notifications_detections_summary">所有追蹤物件的檢閱事件（通知較頻繁）</string>
+    <string name="notifications_cameras_title">攝影機</string>
+    <string name="notifications_all_cameras">所有攝影機</string>
+    <string name="notifications_zones_title">區域</string>
+    <string name="notifications_all_zones">所有區域</string>
+    <string name="notifications_motion_section">移動偵測（無物件）</string>
+    <string name="notifications_motion_cameras">移動偵測攝影機</string>
+    <string name="off">關閉</string>
+    <string name="notifications_motion_cooldown">移動偵測冷卻時間</string>
+    <string name="notifications_motion_urgent">緊急移動偵測警報</string>
+    <string name="notifications_motion_urgent_summary">以彈出通知與強烈震動提醒，效果類似事件警報</string>
+    <string name="notifications_behavior_title">通知行為</string>
+    <string name="notifications_external_only">僅在外部網址時通知</string>
+    <string name="notifications_external_only_summary">連上內部網路（家用 Wi-Fi）時將通知靜音</string>
+    <string name="notifications_tap_action">點選通知後的動作</string>
+    <string name="notifications_tap_action_summary">設定點選通知後要執行的動作</string>
+    <string name="notifications_global_cooldown">全域冷卻時間</string>
+    <string name="notifications_camera_cooldown">各攝影機冷卻時間</string>
+    <string name="notifications_sounds_title">音效</string>
+    <string name="notifications_alert_sound">警報音效</string>
+    <string name="notifications_detection_sound">偵測音效</string>
+    <string name="notifications_motion_sound">移動偵測音效</string>
+    <string name="notifications_sound_summary">點一下選擇鈴聲、系統音效或靜音</string>
+    <string name="notifications_reliability_title">可靠性</string>
+    <string name="notifications_dnd_title">略過「勿擾模式」</string>
+    <string name="notifications_dnd_summary">即使開啟勿擾模式，也可用鬧鐘音量播放警報</string>
+    <string name="notifications_battery_title">電池最佳化</string>
+    <string name="notifications_battery_summary">必須排除最佳化，背景監聽服務才能持續運作</string>
+    <string name="notifications_alarms_title">鬧鐘與提醒</string>
+    <string name="notifications_alarms_summary">允許每 5 分鐘檢查一次並重新啟動監聽服務</string>
+    <string name="notifications_background_title">背景執行限制</string>
+    <string name="notifications_last_alert">上次收到警報</string>
+    <string name="notifications_diagnostics">服務診斷</string>
+    <string name="notifications_diagnostics_summary">查看服務啟動、停止與 WebSocket 時間軸</string>
+    <string name="notifications_permission_denied">未授予通知權限，因此警報通知維持關閉</string>
+    <string name="notifications_dnd_granted">已授權。即使開啟勿擾模式，警報仍會以鬧鐘音量播放。</string>
+    <string name="notifications_dnd_grant">點一下授予勿擾模式存取權，讓警報可以略過勿擾模式。</string>
+    <string name="notifications_battery_exempted">已排除電池最佳化，監聽服務可以在背景持續執行。</string>
+    <string name="notifications_battery_on">目前仍受電池最佳化限制，監聽服務可能遭系統終止。點一下以排除。</string>
+    <string name="notifications_alarm_granted">已授權。每 5 分鐘的檢查可重新啟動監聽服務。</string>
+    <string name="notifications_alarm_grant">點一下允許鬧鐘與提醒，讓每 5 分鐘的檢查可以重新啟動監聽服務。</string>
+    <string name="notifications_no_cameras">不選擇任何攝影機</string>
+    <string name="notifications_all_cameras_short">所有攝影機</string>
+    <string name="notifications_no_zones">不選擇任何區域</string>
+    <string name="notifications_all_zones_short">所有區域</string>
+    <string name="notifications_one_camera">1 台攝影機</string>
+    <string name="notifications_camera_count">%1$d 台攝影機</string>
+    <string name="loading_cameras">正在載入攝影機…</string>
+    <string name="loading_zones">正在載入區域…</string>
+    <string name="fetching_frigate_config">正在讀取 Frigate 設定</string>
+    <string name="set_frigate_url_first">請先設定 Frigate 網址</string>
+    <string name="couldnt_fetch_cameras">無法取得攝影機資料（請檢查帳號密碼與網址）</string>
+    <string name="select_all">全選</string>
+    <string name="deselect_all">取消全選</string>
+    <string name="no_cameras_muted">未選擇攝影機 — 所有攝影機通知皆已靜音</string>
+    <string name="all_cameras_notify">所有攝影機 — 每台攝影機都會觸發通知</string>
+    <string name="camera_selection_count">已選擇 %1$d / %2$d 台攝影機</string>
+    <string name="unable_load_cameras">無法載入攝影機</string>
+    <string name="motion_notifications_title">移動偵測通知</string>
+    <string name="motion_notifications_summary">選擇要在偵測到任何移動時通知的攝影機。Frigate 中該攝影機必須已啟用物件偵測。</string>
+    <string name="no_camera_zones">找不到攝影機區域。請在 Frigate 設定中建立區域。</string>
+    <string name="no_zones_for_enabled_cameras">沒有可顯示的區域。請在「攝影機」篩選中啟用更多攝影機。</string>
+    <string name="no_zones_muted">未選擇區域 — 含區域標記的檢閱事件將不通知</string>
+    <string name="all_zones_notify">所有區域 — 任何符合區域條件的檢閱事件都會通知</string>
+    <string name="zone_selection_count">已選擇 %1$d / %2$d 個區域</string>
+    <string name="unable_load_zones">無法載入區域</string>
+    <string name="ringtone_picker_failed">無法開啟鈴聲選擇器</string>
+    <string name="sound_alert_default">Phylax 警報音（預設）</string>
+    <string name="sound_chime_default">Phylax 提示音（預設）</string>
+    <string name="sound_silent">靜音</string>
+    <string name="sound_custom">自訂音效</string>
+    <string name="diagnostics_never">從未</string>
+    <string name="diagnostics_ago">%1$s前</string>
+    <string name="duration_days_short">%1$d 天</string>
+    <string name="duration_hours_short">%1$d 小時</string>
+    <string name="duration_minutes_short">%1$d 分鐘</string>
+    <string name="duration_seconds_short">%1$d 秒</string>
+    <string name="diag_service_started">服務啟動</string>
+    <string name="diag_previous_start">前次啟動</string>
+    <string name="diag_service_destroyed">服務停止</string>
+    <string name="diag_ws_connected">WebSocket 已連線</string>
+    <string name="diag_ws_disconnected">WebSocket 已中斷</string>
+    <string name="diag_last_alert">上次送出警報</string>
+    <string name="no_alerts_received">尚未收到任何警報。</string>
+    <string name="last_alert_stale">%1$s前。若不符合預期，請檢查「背景執行限制」。</string>
+    <string name="last_alert_age">%1$s前。</string>
+
+    <string-array name="notify_tap_action_entries">
+        <item>開啟檢閱頁面</item><item>只開啟 App</item>
+    </string-array>
+    <string-array name="notify_tap_action_values" translatable="false">
+        <item>review</item><item>home</item>
+    </string-array>
+    <string-array name="cooldown_entries">
+        <item>關閉</item><item>15 秒</item><item>30 秒</item><item>1 分鐘</item><item>2 分鐘</item><item>5 分鐘</item><item>10 分鐘</item>
+    </string-array>
+    <string-array name="cooldown_values" translatable="false">
+        <item>0</item><item>15</item><item>30</item><item>60</item><item>120</item><item>300</item><item>600</item>
+    </string-array>
+
+    <string name="onboarding_reliable_title">確保通知可靠送達</string>
+    <string name="onboarding_battery_auto">Android 可能在一段時間後自動終止背景監聽服務。要允許 Phylax 略過電池最佳化，讓警報能穩定送達嗎？</string>
+    <string name="onboarding_battery_manual">要允許 Phylax 略過電池最佳化嗎？</string>
+    <string name="onboarding_oem_title">%1$s 還需要一項設定</string>
+    <string name="onboarding_dnd_title">略過「勿擾模式」</string>
+    <string name="onboarding_dnd_auto">Phylax 可在勿擾模式開啟時仍以鬧鐘音量播放警報，避免夜間漏掉重要事件。Android 接下來會開啟可要求此權限的 App 清單，請找到 Phylax 並啟用。</string>
+    <string name="onboarding_dnd_manual">要授予 Phylax 略過勿擾模式的權限，讓警報以鬧鐘音量播放嗎？Android 接下來會開啟可要求此權限的 App 清單，請找到 Phylax 並啟用。</string>
+    <string name="dnd_settings_failed">無法開啟勿擾模式存取設定</string>
+    <string name="oem_generic_name">你的裝置</string>
+    <string name="oem_samsung_instructions">在 Samsung 裝置上，只把電池設為「不受限制」仍可能不足，「每日自動最佳化」仍會終止背景服務。請同時將電池設為不受限制，並在「裝置維護」中關閉每日自動最佳化。下方按鈕會開啟相關設定頁面。</string>
+    <string name="oem_xiaomi_instructions">MIUI 需要另外授予背景服務「自動啟動」權限。請在下方開啟的設定頁面中允許 Phylax 自動啟動。</string>
+    <string name="oem_oppo_instructions">OPPO / OnePlus ColorOS 提供啟動管理清單。請在其中允許 Phylax 啟動。</string>
+    <string name="oem_huawei_instructions">Huawei / Honor 需要啟用受保護的應用程式與啟動管理，才能讓監聽服務持續運作。</string>
+    <string name="oem_vivo_instructions">Vivo / iQOO 需要允許 Phylax「高耗電背景執行」。</string>
+    <string name="oem_generic_instructions">一般情況下，排除 Android 的電池最佳化就足夠。若通知仍有延遲，請再檢查裝置廠商的背景活動設定。</string>
+
+    <string name="motion_detected_title">%1$s 偵測到移動</string>
+    <string name="motion_notification_body">移動 • %1$s</string>
+    <string name="detected_at_on">%3$s 的 %2$s 偵測到%1$s</string>
+    <string name="detected_on">%2$s 偵測到%1$s</string>
+    <string name="severity_alert">警報</string>
+    <string name="severity_detection">偵測</string>
+    <string name="activity_label">活動</string>
+    <string name="car_label">汽車</string>
+    <string name="object_and">%1$s和%2$s</string>
+    <string name="object_with">%1$s（%2$s）</string>
+    <string name="channel_alerts_name">Frigate 警報</string>
+    <string name="channel_alerts_desc">Frigate 標記為警報的高優先級檢閱事件</string>
+    <string name="channel_detections_name">Frigate 偵測</string>
+    <string name="channel_detections_desc">追蹤物件偵測</string>
+    <string name="channel_motion_name">Frigate 移動偵測</string>
+    <string name="channel_motion_desc">各攝影機的 Frigate 移動偵測（不需偵測到物件）</string>
+    <string name="channel_motion_urgent_name">Frigate 移動偵測（緊急）</string>
+    <string name="channel_motion_urgent_desc">各攝影機的緊急移動偵測（彈出通知＋強烈震動）</string>
+    <string name="channel_listener_name">Frigate 背景監聽</string>
+    <string name="channel_listener_desc">持續在背景監聽 Frigate 警報</string>
+
+    <string name="mute_groups_title">通知靜音</string>
+    <string name="mute_active_section">目前靜音項目</string>
+    <string name="mute_cameras_section">攝影機</string>
+    <string name="mute_groups_section">群組</string>
+    <string name="mute_none_active">目前沒有任何靜音項目。</string>
+    <string name="mute_no_groups_found">Frigate 中沒有定義攝影機群組。請開啟 Frigate Web UI 建立群組。</string>
+    <string name="mute_unmute_action">取消靜音</string>
+    <string name="mute_duration_title">%1$s 靜音多久？</string>
+    <string name="mute_duration_15m">15 分鐘</string>
+    <string name="mute_duration_30m">30 分鐘</string>
+    <string name="mute_duration_1h">1 小時</string>
+    <string name="mute_duration_2h">2 小時</string>
+    <string name="mute_duration_4h">4 小時</string>
+    <string name="mute_duration_8h">8 小時</string>
+    <string name="mute_loading_groups">載入中…</string>
+
+    <string name="servers_add">新增伺服器</string>
+    <string name="servers_name_hint">伺服器名稱</string>
+    <string name="servers_add_message">請輸入簡短的伺服器名稱。切換到新伺服器後，可在「連線」中設定網址與登入資料。</string>
+    <string name="servers_switched">已切換至 %1$s</string>
+    <string name="servers_added">已新增 %1$s。請開啟「連線」設定網址與登入資料。</string>
+    <string name="servers_default_name">新伺服器</string>
+    <string name="servers_default_name_numbered">新伺服器 %1$d</string>
+    <string name="servers_rename">重新命名</string>
+    <string name="servers_delete_title">刪除 %1$s？</string>
+    <string name="servers_delete_last_message">這會移除唯一的伺服器，以及已儲存的登入資料、網址與通知篩選條件。App 會回到初始設定畫面，且無法復原。</string>
+    <string name="servers_delete_message">這會移除此伺服器，以及已儲存的登入資料、網址與通知篩選條件，且無法復原。</string>
+    <string name="servers_not_configured">尚未設定</string>
+
+    <string name="connection_status_dialog_title">連線狀態</string>
+    <string name="connection_offline">離線</string>
+    <string name="transport_wifi">Wi-Fi</string>
+    <string name="transport_cellular">行動網路</string>
+    <string name="transport_ethernet">乙太網路</string>
+    <string name="transport_other">其他</string>
+    <string name="server_unreachable">無法連線至伺服器</string>
+    <string name="connected_internal">已連線（內部）</string>
+    <string name="connected_external">已連線（外部）</string>
+    <string name="forced_mode">強制 %1$s</string>
+    <string name="roundtrip_avg_last">往返延遲：平均 %1$dms · 最新 %2$dms</string>
+    <string name="roundtrip_last">往返延遲：最新 %1$dms</string>
+    <string name="roundtrip_none">往返延遲：尚無樣本</string>
+    <string name="connection_error_badge">錯誤</string>
+    <string name="connection_internal_badge">內部</string>
+    <string name="connection_external_badge">外部</string>
+    <string name="system_statistics">系統統計</string>
+    <string name="stats_cpu">CPU</string>
+    <string name="stats_gpu">GPU</string>
+    <string name="stats_ram">RAM</string>
+    <string name="stats_uptime_prefix">運作</string>
+    <string name="stats_detectors">偵測器</string>
+    <string name="stats_cameras">攝影機</string>
+    <string name="stats_waiting">正在等待 Frigate 資料…</string>
+    <string name="stats_no_detectors">未回報偵測器</string>
+    <string name="stats_no_cameras">未回報攝影機</string>
+    <string name="stats_detection_fps">偵測 %1$.1f</string>
+    <string name="stats_detection_none">偵測 —</string>
+
+    <string name="download_location_title">下載位置</string>
+    <string name="download_location_summary">選擇下載影片與圖片的儲存位置</string>
+    <string name="downloading_from_frigate">正在從 Frigate 下載</string>
+    <string name="downloading_file">正在下載 %1$s…</string>
+    <string name="downloaded_file">已下載：%1$s</string>
+    <string name="download_failed">下載失敗：%1$s</string>
+    <string name="download_unknown_error">未知錯誤</string>
+    <string name="download_file_not_found">下載完成後找不到檔案</string>
+    <string name="download_timed_out">下載逾時</string>
+    <string name="download_cannot_resume">無法繼續下載</string>
+    <string name="download_storage_not_found">找不到儲存空間</string>
+    <string name="download_file_exists">檔案已存在</string>
+    <string name="download_file_error">檔案錯誤</string>
+    <string name="download_insufficient_space">儲存空間不足</string>
+    <string name="download_too_many_redirects">重新導向次數過多</string>
+    <string name="download_failed_code">下載失敗（代碼：%1$d）</string>
+    <string name="no_app_open_file">找不到可開啟此檔案的 App</string>
+    <string name="error_opening_file">開啟檔案時發生錯誤：%1$s</string>
+    <string-array name="download_location_entries">
+        <item>下載/Frigate</item><item>圖片（圖庫）</item><item>影片（圖庫）</item><item>下載資料夾（根目錄）</item>
+    </string-array>
+    <string-array name="download_location_values" translatable="false">
+        <item>downloads</item><item>pictures</item><item>movies</item><item>downloads_root</item>
+    </string-array>
+
+    <string name="enable_notifications_question">啟用通知？</string>
+    <string name="enable_notifications_message">當此伺服器回報「警報」（例如較高信心度的人員或車輛事件）時接收通知。你之後可在「設定 → 通知」中進一步調整警報、偵測、攝影機與區域。</string>
+    <string name="alert_notifications_enabled">已啟用警報通知</string>
+    <string name="notifications_later_hint">你可以稍後在「設定」中啟用通知</string>
+    <string name="microphone_denied">未授予麥克風權限 — 無法使用雙向通話</string>
+    <string name="ssl_not_yet_valid">憑證尚未生效</string>
+    <string name="ssl_expired">憑證已過期</string>
+    <string name="ssl_id_mismatch">憑證身分不符</string>
+    <string name="ssl_untrusted">憑證不受信任</string>
+    <string name="ssl_date_invalid">憑證日期無效</string>
+    <string name="ssl_invalid">憑證無效</string>
+    <string name="ssl_unknown">未知的 SSL 錯誤</string>
+    <string name="unknown_reason">原因不明</string>
+    <string name="webview_no_additional_info">沒有其他資訊</string>
+    <string name="webview_renderer_terminated">WebView 繪製程序已終止</string>
+    <string name="webview_recovering">正在從 WebView 當機中復原…</string>
+    <string name="certificate_rejected">憑證遭拒 — 請重新選擇憑證</string>
+
+    <string name="voice_audio_mode_title">語音音訊處理</string>
+    <string name="voice_audio_mode_summary">透過語音通話音訊路徑播放 Frigate 音訊。許多裝置會套用硬體降噪與回音消除，可能讓語音更清楚。</string>
+
+    <string name="about_check_updates">檢查更新</string>
+    <string name="about_check_updates_summary">在 GitHub 檢查是否有較新的 Phylax 版本</string>
+    <string name="about_whats_new">最新更新內容</string>
+    <string name="about_whats_new_summary">在 GitHub 查看最新版本說明</string>
+    <string name="about_source">原始碼</string>
+    <string name="about_issues">回報問題</string>
+    <string name="about_share_logs">分享除錯記錄</string>
+    <string name="about_share_logs_summary">將最近一天的記錄打包，以附加到問題回報</string>
+    <string name="about_third_party">第三方授權聲明</string>
+    <string name="about_third_party_summary">開源程式庫與 CC0 素材</string>
+    <string name="about_collecting_logs">正在收集記錄…</string>
+    <string name="about_no_logs">沒有可分享的記錄。Android 未允許 App 讀取自己的 logcat。</string>
+    <string name="about_share_failed">分享失敗：%1$s</string>
+    <string name="about_share_chooser">分享除錯記錄</string>
+    <string name="about_open_with">選擇開啟方式</string>
+    <string name="update_checking">正在檢查更新…</string>
+    <string name="update_check_failed">無法檢查更新：%1$s</string>
+    <string name="update_latest">目前已是最新版本</string>
+    <string name="update_available_title">有可用更新</string>
+    <string name="update_available_body">有新版 %1$s 可用！（%2$d MB）\n\n更新內容：\n%3$s</string>
+    <string name="update_download">下載</string>
+    <string name="update_downloading">正在下載更新…</string>
+    <string name="update_downloading_progress">正在下載更新… %1$d%%</string>
+    <string name="update_downloading_title">正在下載更新</string>
+    <string name="update_download_failed_title">下載失敗</string>
+    <string name="update_download_failed_message">無法下載更新。請稍後再試，或從 GitHub 手動下載。</string>
+    <string name="update_verification_failed_title">更新驗證失敗</string>
+    <string name="update_verification_failed_message">下載的更新不是由與目前 App 相同的開發者簽署。為了安全起見，已取消安裝。\n\n請改從 GitHub 手動下載更新。</string>
+    <string name="update_install_failed_title">安裝失敗</string>
+    <string name="update_install_failed_message">無法安裝更新：%1$s\n\n請改從 GitHub 手動下載。</string>
+
+    <string name="pip_unsupported">此裝置不支援子母畫面</string>
+    <string name="pip_unavailable">請在系統設定中允許 Phylax 使用子母畫面</string>
+    <string name="buy_me_a_coffee">贊助作者</string>
+    <string name="brand_name_upper">PHYLAX TW</string>
+
+    <!-- 動態系統統計格式 -->
+    <string name="stats_memory_format">RAM %1$s</string>
+    <string name="stats_uptime_format">運作 %1$s</string>
+    <string name="stats_camera_fps">%1$.1f fps</string>
+    <string name="stats_camera_fps_none">— fps</string>
+    <string name="stats_uptime_days_hours">%1$d 天 %2$d 小時</string>
+    <string name="stats_uptime_hours_minutes">%1$d 小時 %2$d 分鐘</string>
+    <string name="stats_uptime_minutes">%1$d 分鐘</string>
+    <string name="mute_group_label">%1$s（群組）</string>
+</resources>
