@@ -60,7 +60,7 @@
                     android:paddingTop="4dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="4dp"
-                    android:text="INT"
+                    android:text="@string/connection_internal_badge"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:textStyle="bold"

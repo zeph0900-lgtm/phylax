@@ -21,7 +21,7 @@
         android:layout_marginTop="12dp"
         android:fontFamily="@font/ancient_god"
         android:letterSpacing="0.18"
-        android:text="PHYLAX"
+        android:text="@string/brand_name_upper"
         android:textColor="@color/text_primary"
         android:textSize="28sp" />
 
@@ -46,7 +46,7 @@
         android:layout_marginTop="20dp"
         android:adjustViewBounds="true"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Buy me a coffee"
+        android:contentDescription="@string/buy_me_a_coffee"
         android:src="@drawable/img_buy_me_a_coffee" />
 
 </LinearLayout>
