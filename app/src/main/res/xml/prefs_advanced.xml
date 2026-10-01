@@ -5,8 +5,8 @@
     <SwitchPreferenceCompat
         android:key="voice_audio_mode"
         android:icon="@drawable/ic_adv_voice"
-        android:title="Voice audio processing"
-        android:summary="Route Frigate audio through the voice-call path. Many devices then apply hardware noise suppression and echo cancellation which can make speech clearer."
+        android:title="@string/voice_audio_mode_title"
+        android:summary="@string/voice_audio_mode_summary"
         android:defaultValue="false" />
 
 </PreferenceScreen>

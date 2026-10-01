@@ -215,7 +215,7 @@ class MuteGroupsBottomSheet : BottomSheetDialogFragment() {
 
     private fun labelFor(key: CameraMuteStore.Key): String = when (key.kind) {
         CameraMuteStore.Kind.CAMERA -> displayName(key.name)
-        CameraMuteStore.Kind.GROUP -> "${displayName(key.name)} (group)"
+        CameraMuteStore.Kind.GROUP -> getString(R.string.mute_group_label, displayName(key.name))
     }
 
     private fun resolveBaseUrl(): String? {

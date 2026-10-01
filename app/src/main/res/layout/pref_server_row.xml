@@ -36,7 +36,7 @@
             android:letterSpacing="0.08"
             android:singleLine="true"
             android:ellipsize="end"
-            android:text="Server" />
+            android:text="@string/server_title" />
 
         <TextView
             android:id="@android:id/summary"

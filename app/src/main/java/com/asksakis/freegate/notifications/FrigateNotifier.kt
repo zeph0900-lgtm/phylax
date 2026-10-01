@@ -52,7 +52,7 @@ class FrigateNotifier(private val context: Context) {
         )
 
         return NotificationCompat.Builder(context, CHANNEL_STATUS)
-            .setContentTitle("Phylax")
+            .setContentTitle(context.getString(R.string.app_name))
             .setContentText(text)
             .setSmallIcon(R.drawable.ic_menu_home)
             .setOngoing(true)
@@ -145,8 +145,8 @@ class FrigateNotifier(private val context: Context) {
         snapshot: android.graphics.Bitmap? = null,
         urgent: Boolean = false,
     ) {
-        val title = "Motion detected on ${prettifyCameraName(camera)}"
-        val body = "Motion • ${formatClockTime(timeSec.toDouble())}"
+        val title = context.getString(R.string.motion_detected_title, prettifyCameraName(camera))
+        val body = context.getString(R.string.motion_notification_body, formatClockTime(timeSec.toDouble()))
 
         // Tap jumps the recording scrubber to the moment motion was detected via Frigate's
         // /review?timestamp=<camera>_<sec> link (see DeepLinkRouter.MotionRecording).
@@ -208,8 +208,11 @@ class FrigateNotifier(private val context: Context) {
         val zoneNames = alert.zones
             .map(::prettifyZoneName)
             .filter { it.isNotEmpty() }
-        val location = if (zoneNames.isEmpty()) "" else " at ${zoneNames.joinToString(", ")}"
-        return "$subject detected$location on $cameraText"
+        return if (zoneNames.isEmpty()) {
+            context.getString(R.string.detected_on, subject, cameraText)
+        } else {
+            context.getString(R.string.detected_at_on, subject, zoneNames.joinToString(", "), cameraText)
+        }
     }
 
     /**
@@ -218,7 +221,9 @@ class FrigateNotifier(private val context: Context) {
      * in the shade.
      */
     private fun buildSubtitle(alert: AlertFilter.Alert): String {
-        val severityText = if (alert.severity == AlertFilter.Severity.ALERT) "Alert" else "Detection"
+        val severityText = context.getString(
+            if (alert.severity == AlertFilter.Severity.ALERT) R.string.severity_alert else R.string.severity_detection
+        )
         val whenText = alert.startTimeSec?.let { formatClockTime(it) }
         val primary = if (whenText == null) severityText else "$severityText • $whenText"
 
@@ -234,11 +239,16 @@ class FrigateNotifier(private val context: Context) {
 
     /** Best natural-language subject for the headline, prioritising richer signals over raw labels. */
     private fun describeSubject(alert: AlertFilter.Alert): String {
-        alert.plate?.let { return "${formatObjects(alert.labels).takeIf { it != "Activity" } ?: "Car"} $it" }
+        alert.plate?.let {
+            val activity = context.getString(R.string.activity_label)
+            val vehicle = formatObjects(alert.labels).takeIf { it != activity }
+                ?: context.getString(R.string.car_label)
+            return "$vehicle $it"
+        }
         alert.subLabel?.let { return it.replaceFirstChar { c -> c.uppercase() } }
         val attr = alert.attributes.firstOrNull { it.isNotEmpty() }
         if (attr != null && alert.labels.isNotEmpty()) {
-            return "${formatObjects(alert.labels)} with ${prettifyAttribute(attr)}"
+            return context.getString(R.string.object_with, formatObjects(alert.labels), prettifyAttribute(attr))
         }
         return formatObjects(alert.labels)
     }
@@ -258,10 +268,12 @@ class FrigateNotifier(private val context: Context) {
     private fun formatObjects(labels: List<String>): String {
         val pretty = labels.map { it.replaceFirstChar { c -> c.uppercase() } }
         return when (pretty.size) {
-            0 -> "Activity"
+            0 -> context.getString(R.string.activity_label)
             1 -> pretty[0]
-            2 -> "${pretty[0]} and ${pretty[1]}"
-            else -> pretty.dropLast(1).joinToString(", ") + " and " + pretty.last()
+            2 -> context.getString(R.string.object_and, pretty[0], pretty[1])
+            else -> pretty.dropLast(1).joinToString(", ") +
+                ", " +
+                context.getString(R.string.object_and, "", pretty.last()).trimStart()
         }
     }
 
@@ -284,10 +296,10 @@ class FrigateNotifier(private val context: Context) {
         mgr.createNotificationChannel(
             NotificationChannel(
                 CHANNEL_ALERTS,
-                "Frigate alerts",
+                context.getString(R.string.channel_alerts_name),
                 NotificationManager.IMPORTANCE_HIGH,
             ).apply {
-                description = "High-priority reviews flagged by Frigate as alerts"
+                description = context.getString(R.string.channel_alerts_desc)
                 enableVibration(true)
                 vibrationPattern = longArrayOf(0, 250, 150, 250)
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
@@ -308,10 +320,10 @@ class FrigateNotifier(private val context: Context) {
         mgr.createNotificationChannel(
             NotificationChannel(
                 CHANNEL_DETECTIONS,
-                "Frigate detections",
+                context.getString(R.string.channel_detections_name),
                 NotificationManager.IMPORTANCE_DEFAULT,
             ).apply {
-                description = "Tracked-object detections"
+                description = context.getString(R.string.channel_detections_desc)
                 enableVibration(true)
                 vibrationPattern = longArrayOf(0, 120)
                 setSound(null, null)
@@ -338,10 +350,10 @@ class FrigateNotifier(private val context: Context) {
         mgr.createNotificationChannel(
             NotificationChannel(
                 CHANNEL_MOTION,
-                "Frigate motion",
+                context.getString(R.string.channel_motion_name),
                 NotificationManager.IMPORTANCE_DEFAULT,
             ).apply {
-                description = "Per-camera motion detected by Frigate (no object required)"
+                description = context.getString(R.string.channel_motion_desc)
                 enableVibration(true)
                 vibrationPattern = longArrayOf(0, 120)
                 setSound(null, null)
@@ -354,10 +366,10 @@ class FrigateNotifier(private val context: Context) {
         mgr.createNotificationChannel(
             NotificationChannel(
                 CHANNEL_MOTION_URGENT,
-                "Frigate motion (urgent)",
+                context.getString(R.string.channel_motion_urgent_name),
                 NotificationManager.IMPORTANCE_HIGH,
             ).apply {
-                description = "Per-camera motion, urgent (heads-up + strong vibration)"
+                description = context.getString(R.string.channel_motion_urgent_desc)
                 enableVibration(true)
                 vibrationPattern = longArrayOf(0, 250, 150, 250)
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
@@ -368,12 +380,12 @@ class FrigateNotifier(private val context: Context) {
         mgr.createNotificationChannel(
             NotificationChannel(
                 CHANNEL_STATUS,
-                "Frigate listener",
+                context.getString(R.string.channel_listener_name),
                 // LOW (not MIN): keeps the channel silent/no-badge but avoids the OS
                 // collapsing it so aggressively that the user thinks the app is dead.
                 NotificationManager.IMPORTANCE_LOW,
             ).apply {
-                description = "Persistent background listener for Frigate alerts"
+                description = context.getString(R.string.channel_listener_desc)
                 setShowBadge(false)
                 setSound(null, null)
                 enableVibration(false)

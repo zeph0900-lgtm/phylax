@@ -78,19 +78,19 @@ class ServersFragment : Fragment(R.layout.fragment_servers) {
         // credentials / mTLS.
         FrigateAlertService.updateForContext(requireContext(), forceRestart = true)
         adapter.submit(store.getAll(), store.getActiveId())
-        Toast.makeText(requireContext(), "Switched to ${profile.name}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.servers_switched, profile.name), Toast.LENGTH_SHORT).show()
     }
 
     private fun promptAdd() {
         val input = EditText(requireContext()).apply {
-            hint = "Server name"
+            hint = getString(R.string.servers_name_hint)
             isSingleLine = true
         }
         com.asksakis.freegate.ui.FreegateDialogs.builder(requireContext())
-            .setTitle("Add server")
-            .setMessage("Give the new server a short name. Configure its URL and credentials from Connection after switching to it.")
+            .setTitle(R.string.servers_add)
+            .setMessage(R.string.servers_add_message)
             .setView(wrapDialogInput(input))
-            .setPositiveButton("Add") { _, _ ->
+            .setPositiveButton(R.string.action_add) { _, _ ->
                 val typed = input.text?.toString()?.trim().orEmpty()
                 val name = typed.ifEmpty { uniqueDefaultName() }
                 val created = store.add(name)
@@ -99,21 +99,22 @@ class ServersFragment : Fragment(R.layout.fragment_servers) {
                 adapter.submit(store.getAll(), store.getActiveId())
                 Toast.makeText(
                     requireContext(),
-                    "Added ${created.name}. Open Connection to configure URLs and credentials.",
+                    getString(R.string.servers_added, created.name),
                     Toast.LENGTH_LONG,
                 ).show()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.action_cancel, null)
             .show()
     }
 
     /** Picks a "New server", "New server 2", "New server 3"… name avoiding collisions. */
     private fun uniqueDefaultName(): String {
         val taken = store.getAll().map { it.name }.toSet()
-        if ("New server" !in taken) return "New server"
+        val base = getString(R.string.servers_default_name)
+        if (base !in taken) return base
         var i = 2
-        while ("New server $i" in taken) i++
-        return "New server $i"
+        while (getString(R.string.servers_default_name_numbered, i) in taken) i++
+        return getString(R.string.servers_default_name_numbered, i)
     }
 
     private fun promptRename(profile: ServerProfile) {
@@ -123,9 +124,9 @@ class ServersFragment : Fragment(R.layout.fragment_servers) {
             isSingleLine = true
         }
         com.asksakis.freegate.ui.FreegateDialogs.builder(requireContext())
-            .setTitle("Rename")
+            .setTitle(R.string.servers_rename)
             .setView(wrapDialogInput(input))
-            .setPositiveButton("Save") { _, _ ->
+            .setPositiveButton(R.string.action_save) { _, _ ->
                 val newName = input.text?.toString()?.trim().orEmpty()
                 if (newName.isEmpty()) return@setPositiveButton
                 store.rename(profile.id, newName)
@@ -137,16 +138,13 @@ class ServersFragment : Fragment(R.layout.fragment_servers) {
 
     private fun confirmDelete(profile: ServerProfile) {
         val isLast = store.getAll().size <= 1
-        val message = if (isLast) {
-            "This removes your only server and its stored credentials, URLs, and notification filters. " +
-                "The app returns to the setup screen. Cannot be undone."
-        } else {
-            "This removes the server and its stored credentials, URLs, and notification filters. Cannot be undone."
-        }
+        val message = getString(
+            if (isLast) R.string.servers_delete_last_message else R.string.servers_delete_message
+        )
         com.asksakis.freegate.ui.FreegateDialogs.builder(requireContext())
-            .setTitle("Delete ${profile.name}?")
+            .setTitle(getString(R.string.servers_delete_title, profile.name))
             .setMessage(message)
-            .setPositiveButton("Delete") { _, _ ->
+            .setPositiveButton(R.string.action_delete) { _, _ ->
                 val wasActive = profile.id == store.getActiveId()
                 store.delete(profile.id)
                 // Only restart the listener when we deleted the active profile.

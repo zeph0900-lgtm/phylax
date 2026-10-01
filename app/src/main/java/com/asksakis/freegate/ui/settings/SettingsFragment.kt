@@ -1,8 +1,11 @@
 package com.asksakis.freegate.ui.settings
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
+import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.asksakis.freegate.R
 
@@ -19,6 +22,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.prefs_root, rootKey)
+        findPreference<ListPreference>("app_language")?.apply {
+            summaryProvider = androidx.preference.ListPreference.SimpleSummaryProvider.getInstance()
+            setOnPreferenceChangeListener { _, newValue ->
+                val language = newValue.toString()
+                val locales = if (language == "system") {
+                    LocaleListCompat.getEmptyLocaleList()
+                } else {
+                    LocaleListCompat.forLanguageTags(language)
+                }
+                AppCompatDelegate.setApplicationLocales(locales)
+                true
+            }
+        }
     }
 
     override fun onPreferenceTreeClick(preference: Preference): Boolean {

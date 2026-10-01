@@ -1,5 +1,6 @@
 package com.asksakis.freegate.utils
 
+import com.asksakis.freegate.R
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -168,24 +169,24 @@ class UpdateChecker(private val context: Context) {
         }
         
         val textView = android.widget.TextView(activity).apply {
-            text = """
-                Version ${updateInfo.version} is available! (${fileSizeMB}MB)
-                
-                What's New:
-                ${updateInfo.releaseNotes.take(300)}${if (updateInfo.releaseNotes.length > 300) "..." else ""}
-            """.trimIndent()
+            text = context.getString(
+                R.string.update_available_body,
+                updateInfo.version,
+                fileSizeMB,
+                updateInfo.releaseNotes.take(300) + if (updateInfo.releaseNotes.length > 300) "..." else "",
+            )
             textSize = 14f
         }
         
         scrollView.addView(textView)
         
         com.asksakis.freegate.ui.FreegateDialogs.builder(activity)
-            .setTitle("Update Available")
+            .setTitle(R.string.update_available_title)
             .setView(scrollView)
-            .setPositiveButton("Download") { _, _ ->
+            .setPositiveButton(R.string.update_download) { _, _ ->
                 downloadAndInstallUpdate(activity, updateInfo)
             }
-            .setNegativeButton("Later") { _, _ ->
+            .setNegativeButton(R.string.action_later) { _, _ ->
                 // User chose to update later
             }
             .show()
@@ -200,7 +201,7 @@ class UpdateChecker(private val context: Context) {
         }
         
         val textView = android.widget.TextView(activity).apply {
-            text = "Downloading update..."
+            text = activity.getString(R.string.update_downloading)
             setPadding(0, 0, 0, 16)
         }
         
@@ -212,7 +213,7 @@ class UpdateChecker(private val context: Context) {
         }
         
         val progressDialog = com.asksakis.freegate.ui.FreegateDialogs.builder(activity)
-            .setTitle("Downloading Update")
+            .setTitle(R.string.update_downloading_title)
             .setView(layout)
             .setCancelable(false)
             .create()
@@ -224,7 +225,7 @@ class UpdateChecker(private val context: Context) {
             val apkFile = downloadUpdateInApp(updateInfo) { progress ->
                 activity.runOnUiThread {
                     progressBar.progress = progress
-                    textView.text = "Downloading update... $progress%"
+                    textView.text = activity.getString(R.string.update_downloading_progress, progress)
                 }
             }
             
@@ -235,12 +236,9 @@ class UpdateChecker(private val context: Context) {
                 installUpdate(activity, apkFile)
             } else {
                 com.asksakis.freegate.ui.FreegateDialogs.builder(activity)
-                    .setTitle("Download Failed")
-                    .setMessage(
-                        "Unable to download the update. " +
-                            "Please try again later or download manually from GitHub.",
-                    )
-                    .setPositiveButton("OK", null)
+                    .setTitle(R.string.update_download_failed_title)
+                    .setMessage(R.string.update_download_failed_message)
+                    .setPositiveButton(R.string.action_ok, null)
                     .show()
             }
         }
@@ -298,13 +296,9 @@ class UpdateChecker(private val context: Context) {
                 Log.e(TAG, "APK signature mismatch — refusing to install ${apkFile.absolutePath}")
                 apkFile.delete()
                 com.asksakis.freegate.ui.FreegateDialogs.builder(activity)
-                    .setTitle("Update verification failed")
-                    .setMessage(
-                        "The downloaded update wasn't signed by the same developer as " +
-                            "this app. Installation has been cancelled for your safety.\n\n" +
-                            "Please download the update manually from GitHub."
-                    )
-                    .setPositiveButton("OK", null)
+                    .setTitle(R.string.update_verification_failed_title)
+                    .setMessage(R.string.update_verification_failed_message)
+                    .setPositiveButton(R.string.action_ok, null)
                     .show()
                 return
             }
@@ -340,9 +334,9 @@ class UpdateChecker(private val context: Context) {
         } catch (e: Exception) {
             Log.e(TAG, "Error installing update: ${e.message}", e)
             com.asksakis.freegate.ui.FreegateDialogs.builder(activity)
-                .setTitle("Installation Failed")
-                .setMessage("Unable to install the update: ${e.message}\n\nPlease download manually from GitHub.")
-                .setPositiveButton("OK", null)
+                .setTitle(R.string.update_install_failed_title)
+                .setMessage(activity.getString(R.string.update_install_failed_message, e.message ?: ""))
+                .setPositiveButton(R.string.action_ok, null)
                 .show()
         }
     }

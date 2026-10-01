@@ -1,5 +1,6 @@
 package com.asksakis.freegate.ui.settings
 
+import com.asksakis.freegate.R
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -34,8 +35,8 @@ class NotificationZonesFragment : PreferenceFragmentCompat() {
         preferenceScreen = preferenceManager.createPreferenceScreen(requireContext())
 
         val placeholder = Preference(requireContext()).apply {
-            title = "Loading zones..."
-            summary = "Fetching Frigate configuration"
+            title = getString(R.string.loading_zones)
+            summary = getString(R.string.fetching_frigate_config)
             isSelectable = false
             key = "__loading__"
         }
@@ -47,7 +48,7 @@ class NotificationZonesFragment : PreferenceFragmentCompat() {
     private fun loadZones() {
         val baseUrl = networkUtils.getUrl().trimEnd('/').takeIf { it.isNotBlank() }
         if (baseUrl == null) {
-            showError("Set the Frigate URL first")
+            showError(getString(R.string.set_frigate_url_first))
             return
         }
 
@@ -67,9 +68,9 @@ class NotificationZonesFragment : PreferenceFragmentCompat() {
 
             if (camerasWithZones.isEmpty()) {
                 val msg = if (enabledCameras.isEmpty())
-                    "No camera zones found. Configure zones in Frigate's config."
+                    getString(R.string.no_camera_zones)
                 else
-                    "No zones to show. Enable more cameras in the Cameras filter."
+                    getString(R.string.no_zones_for_enabled_cameras)
                 showError(msg)
                 return@launch
             }
@@ -155,11 +156,11 @@ class NotificationZonesFragment : PreferenceFragmentCompat() {
     ) {
         val isAll = allEntries.isNotEmpty() && selected.size >= allEntries.size
         val isEmpty = selected.isEmpty()
-        pref.title = if (isAll) "Deselect all" else "Select all"
+        pref.title = getString(if (isAll) R.string.deselect_all else R.string.select_all)
         pref.summary = when {
-            isEmpty -> "No zones — zone-tagged reviews are muted"
-            isAll -> "All zones — every review with a zone match notifies"
-            else -> "${selected.size} of ${allEntries.size} zones selected"
+            isEmpty -> getString(R.string.no_zones_muted)
+            isAll -> getString(R.string.all_zones_notify)
+            else -> getString(R.string.zone_selection_count, selected.size, allEntries.size)
         }
     }
 
@@ -168,7 +169,7 @@ class NotificationZonesFragment : PreferenceFragmentCompat() {
         Toast.makeText(ctx, message, Toast.LENGTH_LONG).show()
         val screen = preferenceManager.createPreferenceScreen(ctx)
         val msg = Preference(ctx).apply {
-            title = "Unable to load zones"
+            title = getString(R.string.unable_load_zones)
             summary = message
             isSelectable = false
         }

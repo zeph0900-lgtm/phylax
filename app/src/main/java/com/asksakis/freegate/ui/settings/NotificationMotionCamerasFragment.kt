@@ -1,5 +1,6 @@
 package com.asksakis.freegate.ui.settings
 
+import com.asksakis.freegate.R
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
@@ -32,8 +33,8 @@ class NotificationMotionCamerasFragment : PreferenceFragmentCompat() {
 
         preferenceScreen = preferenceManager.createPreferenceScreen(requireContext())
         val placeholder = Preference(requireContext()).apply {
-            title = "Loading cameras..."
-            summary = "Fetching Frigate configuration"
+            title = getString(R.string.loading_cameras)
+            summary = getString(R.string.fetching_frigate_config)
             isSelectable = false
         }
         preferenceScreen.addPreference(placeholder)
@@ -44,13 +45,13 @@ class NotificationMotionCamerasFragment : PreferenceFragmentCompat() {
     private fun loadCameras() {
         val baseUrl = networkUtils.getUrl().trimEnd('/').takeIf { it.isNotBlank() }
         if (baseUrl == null) {
-            showError("Set the Frigate URL first")
+            showError(getString(R.string.set_frigate_url_first))
             return
         }
         lifecycleScope.launch {
             val cameras = FrigateConfigFetcher(requireContext()).fetchCameraNames(baseUrl)
             if (cameras.isEmpty()) {
-                showError("Couldn't fetch cameras (check credentials and URL)")
+                showError(getString(R.string.couldnt_fetch_cameras))
                 return@launch
             }
             renderScreen(cameras)
@@ -66,9 +67,8 @@ class NotificationMotionCamerasFragment : PreferenceFragmentCompat() {
             order = -1
             isSelectable = false
             isIconSpaceReserved = false
-            title = "Motion notifications"
-            summary = "Pick cameras to get a notification on any motion. Requires " +
-                "object detection enabled on the camera in Frigate."
+            title = getString(R.string.motion_notifications_title)
+            summary = getString(R.string.motion_notifications_summary)
         }
         screen.addPreference(hint)
 
@@ -102,7 +102,7 @@ class NotificationMotionCamerasFragment : PreferenceFragmentCompat() {
         val screen = preferenceManager.createPreferenceScreen(ctx)
         screen.addPreference(
             Preference(ctx).apply {
-                title = "Unable to load cameras"
+                title = getString(R.string.unable_load_cameras)
                 summary = message
                 isSelectable = false
             },
