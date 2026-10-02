@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Phylax TW</string>
+    <string name="app_name">Phylax TX</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Phylax TW</string>
+    <string name="nav_header_title">Phylax TX</string>
     <string name="nav_header_subtitle">Viewer for Frigate NVR</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>

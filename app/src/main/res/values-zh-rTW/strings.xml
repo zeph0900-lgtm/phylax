@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Phylax TW</string>
+    <string name="app_name">Phylax TX</string>
     <string name="navigation_drawer_open">開啟導覽選單</string>
     <string name="navigation_drawer_close">關閉導覽選單</string>
-    <string name="nav_header_title">Phylax TW</string>
+    <string name="nav_header_title">Phylax TX</string>
     <string name="nav_header_subtitle">Frigate NVR 檢視器</string>
     <string name="nav_header_desc">導覽標頭</string>
     <string name="action_settings">設定</string>
