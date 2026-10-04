@@ -35,11 +35,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.asksakis.freegate.twexport"
+        applicationId = "com.asksakis.freegate.twexport2"
         minSdk = 29
         targetSdk = 35
-        versionCode = 2104
-        versionName = "2.13-TW1.1-EXP1.1"
+        versionCode = 2105
+        versionName = "2.13-TW1.1-EXP2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
