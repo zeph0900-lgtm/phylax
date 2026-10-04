@@ -32,19 +32,33 @@ android {
                     ?: System.getenv("RELEASE_KEY_PASSWORD")
             }
         }
+
+        // CI/test APKs must always use this exact repository key. Do not rely on AGP's
+        // implicit ~/.android/debug.keystore because a runner/daemon may create or cache
+        // a different key before the build step, which makes subsequent APKs impossible
+        // to install as updates.
+        create("ciDebug") {
+            storeFile = rootProject.file(".ci/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     defaultConfig {
-        applicationId = "com.asksakis.freegate.tw"
+        applicationId = "com.asksakis.freegate.twexport2"
         minSdk = 29
         targetSdk = 35
-        versionCode = 2102
-        versionName = "2.13-TW1.1"
+        versionCode = 2107
+        versionName = "2.13-TW1.1-EXP2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("ciDebug")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(

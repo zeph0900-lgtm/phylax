@@ -25,6 +25,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val actionId = when (preference.key) {
             "cat_connection" -> R.id.action_settings_to_connection
             "cat_notifications" -> R.id.action_settings_to_notifications
+            "cat_quick_clip" -> R.id.action_settings_to_clip_export
             "cat_downloads" -> R.id.action_settings_to_downloads
             "cat_advanced" -> R.id.action_settings_to_advanced
             "cat_about" -> R.id.action_settings_to_about

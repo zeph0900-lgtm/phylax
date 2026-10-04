@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
         <item
+            android:id="@+id/nav_clip_export"
+            android:icon="@drawable/ic_settings_downloads"
+            android:title="下載片段" />
+        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_settings"
             android:title="@string/menu_settings" />
