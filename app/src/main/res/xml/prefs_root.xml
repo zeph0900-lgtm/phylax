@@ -21,6 +21,12 @@
         android:summary="@string/settings_notifications_summary" />
 
     <Preference
+        android:key="cat_quick_clip"
+        android:icon="@drawable/ic_settings_downloads"
+        android:title="快速下載片段"
+        android:summary="選擇攝影機與任意開始、結束時間，直接下載 MP4" />
+
+    <Preference
         android:key="cat_downloads"
         android:icon="@drawable/ic_settings_downloads"
         android:title="@string/settings_downloads_title"
