@@ -39,6 +39,7 @@ import java.util.Locale
  * into the app's existing DownloadHandler, so the user gets a normal local file while
  * Frigate's /exports directory stays untouched.
  */
+@Suppress("LongMethod", "MagicNumber")
 class ClipExportFragment : Fragment() {
 
     private lateinit var cameraSpinner: Spinner
@@ -213,9 +214,9 @@ class ClipExportFragment : Fragment() {
             return
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             val names = FrigateConfigFetcher(context).fetchCameraNames(baseUrl)
-            if (!isAdded) return@launch
+            if (!isAdded || rootView == null) return@launch
             loading.visibility = View.GONE
             cameraNames = names
             if (names.isEmpty()) {
