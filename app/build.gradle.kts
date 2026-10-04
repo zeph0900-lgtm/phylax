@@ -32,6 +32,17 @@ android {
                     ?: System.getenv("RELEASE_KEY_PASSWORD")
             }
         }
+
+        // CI/test APKs must always use this exact repository key. Do not rely on AGP's
+        // implicit ~/.android/debug.keystore because a runner/daemon may create or cache
+        // a different key before the build step, which makes subsequent APKs impossible
+        // to install as updates.
+        create("ciDebug") {
+            storeFile = rootProject.file(".ci/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     defaultConfig {
@@ -45,6 +56,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("ciDebug")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
