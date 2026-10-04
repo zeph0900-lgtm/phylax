@@ -49,6 +49,13 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
         <action
+            android:id="@+id/action_settings_to_clip_export"
+            app:destination="@id/nav_clip_export"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
             android:id="@+id/action_settings_to_downloads"
             app:destination="@id/nav_settings_downloads"
             app:enterAnim="@anim/fade_in"
