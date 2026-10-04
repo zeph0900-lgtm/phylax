@@ -1,9 +1,6 @@
 package com.asksakis.freegate
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
-import androidx.preference.PreferenceManager
 import com.asksakis.freegate.auth.ServerProfileStore
 import com.asksakis.freegate.utils.PersistentLogcatWriter
 
@@ -15,16 +12,6 @@ import com.asksakis.freegate.utils.PersistentLogcatWriter
 class FrigateViewerApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        val language = PreferenceManager.getDefaultSharedPreferences(this)
-            .getString("app_language", "system") ?: "system"
-        val locales = if (language == "system") {
-            LocaleListCompat.getEmptyLocaleList()
-        } else {
-            LocaleListCompat.forLanguageTags(language)
-        }
-        if (AppCompatDelegate.getApplicationLocales() != locales) {
-            AppCompatDelegate.setApplicationLocales(locales)
-        }
         // Promote pre-multi-server flat-state installs to the per-profile store. No-op
         // once at least one profile exists, so it's safe on every launch.
         ServerProfileStore.getInstance(this).ensureMigrated()
